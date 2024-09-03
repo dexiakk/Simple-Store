@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Freeman&display=swap');
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.redBackground {
+  background-color: #e71212;
+}
+
+.blueBackground {
+  background-color: #2828df;
+}
+
+.greenBackground {
+  background-color: #18aa1a;
+}
+
+.purpleBackground {
+  background-color: #9a39d7;
+}
+
+
+.slide-out-left {
+  animation: slideOutLeft 0.75s forwards;
+}
+
+.slide-in-right {
+  animation: slideInRight 1s forwards;
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-200%);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(200%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.backgroundTransition {
+  transition: background-color 1s;
+}
+
+.backgroundShadow {
+  -webkit-box-shadow: inset 0px 0px 62px -30px rgba(0, 0, 0, 1);
+  -moz-box-shadow: inset 0px 0px 62px -30px rgba(0, 0, 0, 1);
+  box-shadow: inset 0px 0px 62px -30px rgba(0, 0, 0, 1);
+}
+
+.backgroundGradient {
+  background: rgb(255, 255, 255);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2930987394957983) 0%, rgba(158, 0, 255, 0) 42%);
+}
+
+.colorsShadow {
+  -webkit-box-shadow: 0px 0px 42px -18px rgba(0, 0, 0, 1);
+  -moz-box-shadow: 0px 0px 42px -18px rgba(0, 0, 0, 1);
+  box-shadow: 0px 0px 42px -18px rgba(0, 0, 0, 1);
+}
+
+.textShadow{
+  text-shadow: 0px 0px 6px rgba(66, 68, 90, 1);
+}
+
+.bar1, .bar2, .bar3 {
+  width: 35px;
+  height: 5px;
+  background-color: white;
+  margin: 6px 0;
+  transition: 0.4s;
+  border-radius: 5px
+}
+
+/* Rotate first bar */
+.changedBar1 {
+  transform: translate(0, 11px) rotate(-45deg);
+}
+
+/* Fade out the second bar */
+.changedBar2 {opacity: 0;}
+
+/* Rotate last bar */
+.changedBar3 {
+  transform: translate(0, -11px) rotate(45deg);
+}
+
+.itemNameCustomMedia{
+  @media (min-width: 1800px) { display:flex }
+}
+.itemNameMobileCustomMedia{
+  @media (min-width: 1800px) { display:none }
+}
+
+.elementsCustomMedia{
+  @media (min-width: 1800px) { display:block }
+}
+
+input[type="checkbox"]:checked {
+  @apply bg-black border-black;
+}
+input[type="checkbox"]:checked::before {
+  content: "✔";
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 0.75rem;
+}
+input[type="checkbox"] {
+  @apply appearance-none h-5 w-5 border-2 border-gray-300 rounded-sm flex items-center justify-center;
+}
