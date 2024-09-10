@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
+import AnimatedArrow from "../animatedArrow/animatedArrow";
 
 export default function ColorsFilter({ onFilterChange }: { onFilterChange: Function; }) {
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [listVisibility, setListVisibility] = useState("hidden")
+  const [isArrowActive, setIsArrowActive] = useState(false);
 
   const colors = [
     { label: 'Czarny', value: 'black' },
@@ -29,11 +31,15 @@ export default function ColorsFilter({ onFilterChange }: { onFilterChange: Funct
   const handleListVisibility = () =>
     {
       listVisibility === "hidden" ? setListVisibility("block") : setListVisibility("hidden")
+      setIsArrowActive(!isArrowActive);
     }
 
   return (
     <div className="py-2 border-y-[1px] border-gray-300">
-      <div onClick={handleListVisibility} className="text-[17px] font-bold">Kolory</div> 
+      <div onClick={handleListVisibility} className="flex justify-between font-bold mb-1">
+        Kolory 
+        <AnimatedArrow isActive={isArrowActive} onClick={handleListVisibility} />
+        </div> 
       <div className={listVisibility}>
         {colors.map(({ label, value }) => (
           <div key={value} className="flex">
@@ -44,7 +50,7 @@ export default function ColorsFilter({ onFilterChange }: { onFilterChange: Funct
               checked={selectedColors.includes(value)}
               onChange={(e) => handleColorChange(value, e.target.checked)}
             />
-            <label htmlFor={`color-${value}`}>{label}</label>
+            <label className="pl-[7px]" htmlFor={`color-${value}`}>{label}</label>
           </div>
         ))}
       </div>

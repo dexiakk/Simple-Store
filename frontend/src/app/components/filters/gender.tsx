@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
+import AnimatedArrow from "../animatedArrow/animatedArrow";
 
-export default function ColorsFilter({ onFilterChange }: { onFilterChange: Function; }) {
+export default function GenderFilter({ onFilterChange }: { onFilterChange: Function; }) {
   const [selectedGender, setSelectedGender] = useState([]);
   const [listVisibility, setListVisibility] = useState("hidden")
+  const [isArrowActive, setIsArrowActive] = useState(false);
 
   const gender = [
     { label: 'Męskie', value: 'male' },
@@ -27,11 +29,15 @@ export default function ColorsFilter({ onFilterChange }: { onFilterChange: Funct
   const handleListVisibility = () =>
     {
       listVisibility === "hidden" ? setListVisibility("block") : setListVisibility("hidden")
+      setIsArrowActive(!isArrowActive);
     }
 
   return (
     <div className="py-2 border-y-[1px] border-gray-300">
-      <div onClick={handleListVisibility} className="text-[17px] font-bold">Płeć</div> 
+      <div onClick={handleListVisibility} className="flex justify-between font-bold mb-1">
+        Płeć
+        <AnimatedArrow isActive={isArrowActive} onClick={handleListVisibility} />
+        </div> 
       <div className={listVisibility}>
         <div>
           {gender.map(({ label, value }) => (
@@ -43,7 +49,7 @@ export default function ColorsFilter({ onFilterChange }: { onFilterChange: Funct
                 checked={selectedGender.includes(value)}
                 onChange={(e) => handleGenderChange(value, e.target.checked)}
               />
-              <label htmlFor={`gender-${value}`}>{label}</label>
+              <label className="pl-[7px]" htmlFor={`gender-${value}`}>{label}</label>
             </div>
           ))}
         </div>

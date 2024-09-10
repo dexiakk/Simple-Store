@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
+import AnimatedArrow from "../animatedArrow/animatedArrow";
 
 export default function ShoeHighFilter({ onFilterChange }: { onFilterChange: Function; }) {
   const [selectedShoeHigh, setSelectedShoeHigh] = useState<string[]>([]);
   const [listVisibility, setListVisibility] = useState("hidden")
+  const [isArrowActive, setIsArrowActive] = useState(false);
 
   const shoe_high = [
     { label: 'Buty typu Low', value: 'low' },
@@ -26,11 +28,15 @@ export default function ShoeHighFilter({ onFilterChange }: { onFilterChange: Fun
   const handleListVisibility = () =>
     {
       listVisibility === "hidden" ? setListVisibility("block") : setListVisibility("hidden")
+      setIsArrowActive(!isArrowActive);
     }
 
   return (
     <div className="py-2 border-y-[1px] border-gray-300">
-      <div onClick={handleListVisibility} className="text-[17px] font-bold">Wysokość buta</div> 
+      <div onClick={handleListVisibility} className="flex justify-between font-bold mb-1">
+        Wysokość buta 
+        <AnimatedArrow isActive={isArrowActive} onClick={handleListVisibility} />
+        </div> 
       <div className={listVisibility}>
         {shoe_high.map(({ label, value }) => (
           <div key={value} className="flex">
@@ -41,7 +47,7 @@ export default function ShoeHighFilter({ onFilterChange }: { onFilterChange: Fun
               checked={selectedShoeHigh.includes(value)}
               onChange={(e) => handleShoeHighChange(value, e.target.checked)}
             />
-            <label htmlFor={`shoe_high-${value}`}>{label}</label>
+            <label className="pl-[7px]" htmlFor={`shoe_high-${value}`}>{label}</label>
           </div>
         ))}
       </div>
