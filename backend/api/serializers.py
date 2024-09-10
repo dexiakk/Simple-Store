@@ -25,7 +25,7 @@ class ShoeSerializer(serializers.ModelSerializer):
     manufacturer = ManufacturerSerializer(read_only=True)
     category = CategorySerializer(read_only=True)
     collection = CollectionSerializer(read_only=True)
-    color = ColorSerializer(read_only=True)
+    colors = ColorSerializer(many=True, read_only=True)
 
     class Meta:
         model = Shoe

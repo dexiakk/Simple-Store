@@ -23,7 +23,7 @@ from django.conf.urls.static import static
 
 
 router = routers.DefaultRouter()
-router.register(r'shoe', ShoeViewSet)
+router.register(r'shoes', ShoeViewSet)
 router.register(r'manufacturer', ManufacturerViewSet)
 router.register(r'color', ColorViewSet)
 router.register(r'category', CategoryViewSet)
