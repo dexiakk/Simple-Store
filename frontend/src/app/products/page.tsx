@@ -7,6 +7,7 @@ import FiltersSideBar from "../components/filtersSideBar"
 import ItemWindow from "../components/itemWindow"
 import TopBar from "../components/topBar"
 import Footer from "../components/footer"
+import NavBar from "../components/NavBar"
 
 export default function page({ bgcolor }: { bgcolor: string }) {
   const [shoes, setShoes] = useState([]);
@@ -16,6 +17,7 @@ export default function page({ bgcolor }: { bgcolor: string }) {
     colors: '',
     price_min: 0,
     price_max: 500,
+    shoe_high: '',
   })
 
   const ClearFilters = {
@@ -23,13 +25,14 @@ export default function page({ bgcolor }: { bgcolor: string }) {
     gender: '',
     colors: '',
     price_min: 0,
-    price_max: 500,
+    price_max: 500, 
+    shoe_high: '',
   }
 
   useEffect(() => {
     const fetchShoes = async () => {
       try {
-        console.log("Aktualne filtry:", filters); // Dodaj logi do debugowania
+        console.log("Aktualne filtry:", filters); 
         const response = await axios.get('http://localhost:8000/api/shoes/', {
           params: filters, 
         });
@@ -53,11 +56,12 @@ export default function page({ bgcolor }: { bgcolor: string }) {
     }
   };
 
-  const handleFilterChange = (key, value) => {
+
+  const handleFilterChange = (key:string, value:any) => {
     const convertedValue = key === 'colors' ? value.join(',') 
     : (key === 'gender' ? value.join(',') 
-    : (key === 'shoe_high' ? value.join(',') 
-    : (key === 'collection' ? value.join(',') : value)))
+    : (key === 'shoe_high' ? value.join(',')
+    : (key === 'collection' ? value : value)))
   
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -65,13 +69,15 @@ export default function page({ bgcolor }: { bgcolor: string }) {
     }));
   };
 
+
+
   return (
     <main className="flex justify-center bg-white">
       <div className="w-full">
         <TopBar />
         <div className="flex justify-center">
           <div className="w-[90%]">
-            <Nav navColor="black" />
+            <NavBar color="black" />
           </div>
         </div>
         <SalesBar />
@@ -85,7 +91,7 @@ export default function page({ bgcolor }: { bgcolor: string }) {
               </div>
             </div>
             <div className="flex justify-between">
-              <FiltersSideBar onFilterChange={handleFilterChange}/>
+              <FiltersSideBar onFilterChange={handleFilterChange} filters={filters}/>
               <div className="grid grid-cols-3 gap-4">
               {shoes.map(shoe => (
                     <ItemWindow

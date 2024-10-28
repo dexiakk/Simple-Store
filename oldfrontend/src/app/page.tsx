@@ -53,7 +53,8 @@ export default function Home() {
     <main className={`w-full pb-[55px] flex justify-center backgroundTransition backgroundShadow overflow-hidden ${backgroundColor}`}>
       <div className="w-[90%]">
         <Nav navColor="white"/>
-        <div className="z-0 absolute backgroundGradient right-[1%] bottom-[1px] w-full h-[1000px]"></div>
+        <div className="z-0 absolute backgroundGradient ri
+        ght-[1%] bottom-[1px] w-full h-[1000px]"></div>
         <div className="relative">
           <ItemName />
           <div className="flex justify-center relative mb-24 lg:mb-30 2xl:mb-10 3xl:mb-[-75px]">
