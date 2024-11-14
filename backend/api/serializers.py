@@ -37,8 +37,44 @@ class UserDetailsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserDetails
-        fields = ['username', 'firstName', 'lastName', 'preferedGender', 'dateOfBirth', 'created_at']
+        fields = ['username', 'firstName', 'lastName', 'preferedGender', 'dateOfBirth', 'created_at', 'avatar']
         read_only_fields = ['user', 'dateOfBirth', 'created_at']
 
     def get_username(self, obj):
         return obj.user.username if obj.user else None
+    
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ['id', 'street', 'house_number', 'city', 'postal_code', 'country']
+        
+class ShoeImageGallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoeImageGallery
+        fields = ['id', 'image1', 'image2', 'image3', 'image4']
+        
+class ShoeVariantSerializer(serializers.ModelSerializer):
+    color = serializers.StringRelatedField()
+    images_gallery = ShoeImageGallerySerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = ShoeVariant
+        fields = ['id', 'color', 'main_image', 'images_gallery']
+        
+class ShoesSerializer(serializers.ModelSerializer):
+    manufacturer = serializers.StringRelatedField()
+    variants = ShoeVariantSerializer(many=True, read_only=True)
+    shoe_high = serializers.CharField(source='get_shoe_high_display')
+    colors = serializers.SerializerMethodField()
+    shoe_gallery = ShoeImageGallerySerializer(many=True, read_only=True) 
+
+    class Meta:
+        model = Shoe
+        fields = [
+            'id', 'manufacturer', 'model', 'price', 'description',
+            'bestseller', 'gender', 'shoe_high', 'variants', 'colors', 'shoe_gallery'
+        ]
+        
+    def get_colors(self, obj):
+        # Zwracamy unikalne kolory z powiązanych wariantów
+        return [variant.color.name for variant in obj.variants.all()]

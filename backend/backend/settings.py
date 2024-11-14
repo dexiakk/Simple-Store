@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-66nli(355@jfdgi(b-vz7*+xdw+r2pm2m8moj59n$1wt5ps&t+'
+SECRET_KEY = 'django-insecure-1tttyyhyjjle35x=^-_hhh$-$n2k_p*_=j^sqr3hoiegx-j2ip'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -45,6 +45,8 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
+
+
 
 # Application definition
 
@@ -76,6 +78,7 @@ ROOT_URLCONF = 'backend.urls'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
+
 
 TEMPLATES = [
     {
@@ -148,5 +151,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

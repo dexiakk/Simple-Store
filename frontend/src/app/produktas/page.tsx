@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from "react"
 import axios from "axios"
-import Nav from "../components/nav"
 import SalesBar from "../components/salesBar"
 import FiltersSideBar from "../components/filtersSideBar"
 import ItemWindow from "../components/itemWindow"

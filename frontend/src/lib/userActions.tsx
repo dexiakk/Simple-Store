@@ -11,3 +11,13 @@ export const getLoggedInUser = async () => {
         return null;
     }
 }
+
+export const getUserAdresses = async () => {
+    try {
+        const addresses = await api.get("/api/useraddresses/")
+
+        return addresses.data;
+    } catch (error) {
+        return null;
+    }
+}

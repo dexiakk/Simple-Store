@@ -8,7 +8,7 @@ export default function CustomCalendar({ selectedDate, onSelect }) {
     const handleYearChange = (event) => {
         const year = parseInt(event.target.value, 10);
         setCurrentYear(year);
-        setCurrentMonth(new Date(year, currentMonth.getMonth(), 1)); // Ustaw miesiąc na pierwszy miesiąc wybranego roku
+        setCurrentMonth(new Date(year, currentMonth.getMonth(), 1));
     };
 
     const handleMonthChange = (direction) => {
