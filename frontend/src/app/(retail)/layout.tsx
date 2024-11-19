@@ -21,7 +21,11 @@ export default function RootLayout({
           </div>
         </div>
         <SalesBar />
-        {children}
+        <div className="w-full flex justify-center">
+          <div className="w-[90%]">
+            {children}
+          </div>
+        </div>
         <Footer />
       </body>
     </html>

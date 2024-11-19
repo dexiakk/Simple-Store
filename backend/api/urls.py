@@ -7,5 +7,6 @@ urlpatterns = [
     path("useraddresses/", views.AddressListCreate.as_view(), name="user-address"),
     path("useraddress/update/<int:id>/", views.AddressPartialUpdateView.as_view(), name="user-address-update"),
     path("useraddresses/delete/<int:id>/", views.AddressDeleteView.as_view(), name="user-address-delete"),
-    path("shoeslist/", views.ShoesList.as_view(), name="shoes-list"),
+    path("shoelist/", views.ShoeList.as_view(), name="shoes-list"),
+    path('shoe-filters/', views.ShoeFiltersView.as_view(), name='shoe-filters'),
 ]

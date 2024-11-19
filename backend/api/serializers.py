@@ -61,20 +61,50 @@ class ShoeVariantSerializer(serializers.ModelSerializer):
         model = ShoeVariant
         fields = ['id', 'color', 'main_image', 'images_gallery']
         
-class ShoesSerializer(serializers.ModelSerializer):
+    def get_color(self, obj):
+        return {
+            "name": obj.color.name,
+            "value": obj.color.color,
+        }
+        
+class ShoeSerializer(serializers.ModelSerializer):
     manufacturer = serializers.StringRelatedField()
     variants = ShoeVariantSerializer(many=True, read_only=True)
     shoe_high = serializers.CharField(source='get_shoe_high_display')
     colors = serializers.SerializerMethodField()
-    shoe_gallery = ShoeImageGallerySerializer(many=True, read_only=True) 
+    shoe_gallery = ShoeImageGallerySerializer(many=True, read_only=True)
 
     class Meta:
         model = Shoe
         fields = [
             'id', 'manufacturer', 'model', 'price', 'description',
-            'bestseller', 'gender', 'shoe_high', 'variants', 'colors', 'shoe_gallery'
+            'bestseller', 'gender', 'shoe_high', 'variants', 'colors', 'shoe_gallery', 'category', 'collection', 
         ]
         
     def get_colors(self, obj):
-        # Zwracamy unikalne kolory z powiązanych wariantów
-        return [variant.color.name for variant in obj.variants.all()]
+        return [
+            {
+                "name": variant.color.name,
+                "value": variant.color.color,
+            }
+            for variant in obj.variants.all()
+        ]
+        
+class ShoeFiltersSerializer(serializers.Serializer):
+    categories = serializers.ListField(child=serializers.CharField())
+    colors = serializers.ListField(child=serializers.CharField())
+    collections = serializers.ListField(child=serializers.CharField())
+    shoe_high = serializers.ListField(child=serializers.CharField())
+    genders = serializers.ListField(child=serializers.CharField())
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        
+        # Mapowanie starych nazw na nowe (np. "categories" na "category")
+        return {
+            "category": representation.get("categories", []),  # Zmieniamy "categories" na "category"
+            "color": representation.get("colors", []),  # Zmieniamy "colors" na "color"
+            "collection": representation.get("collections", []),  # Zmieniamy "collections" na "collection"
+            "shoe_high": representation.get("shoe_high", []),  # Zmieniamy "shoe_high" na "shoe_high"
+            "gender": representation.get("genders", []),  # Zmieniamy "genders" na "gender"
+        }

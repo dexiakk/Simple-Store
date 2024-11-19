@@ -114,7 +114,7 @@ class Shoe(models.Model):
     shoe_high = models.CharField(max_length=50, choices=SHOE_HIGH_CHOICES)
 
     def __str__(self):
-        return f"Shoe model: {self.model}"
+        return f"Shoe model: {self.model} - {self.gender}"
 
     class Meta:
         verbose_name_plural = "Shoes"
@@ -128,7 +128,7 @@ class ShoeImageGallery(models.Model):
     image4 = models.ImageField(upload_to=shoe_gallery_upload_to, null=True)
 
     def __str__(self):
-        return f"Gallery Image for {self.shoe.model} {self.color}"
+        return f"Image gallery for {self.shoe.model} - {self.color} - {self.shoe.gender}"
 
     class Meta:
         verbose_name_plural = "Shoe Images Gallery"
@@ -140,7 +140,7 @@ class ShoeVariant(models.Model):
     images_gallery = models.ManyToManyField(ShoeImageGallery)
 
     def __str__(self):
-        return f"{self.shoe.model} - {self.color.name}"
+        return f"{self.shoe.model} - {self.color.name} - {self.shoe.gender}"
 
     class Meta:
         verbose_name_plural = "Shoe Variants"

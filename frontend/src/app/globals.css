@@ -175,3 +175,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+input[type="checkbox"]:checked {
+  @apply bg-black border-black;
+}
+input[type="checkbox"]:checked::before {
+  content: "✔";
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 0.75rem;
+}
+input[type="checkbox"] {
+  @apply appearance-none h-5 w-5 border-2 border-gray-300 rounded-sm flex items-center justify-center;
+}

@@ -21,3 +21,39 @@ export const getUserAdresses = async () => {
         return null;
     }
 }
+
+export const getShoeList = async (filters:FiltersToSentProps) => {
+    try {
+        const formattedFilters = Object.keys(filters.filters).reduce((acc, key) => {
+            const typedKey = key as keyof Filters;
+
+            if (Array.isArray(filters.filters[typedKey])) {
+                filters.filters[typedKey].forEach((value) => {
+                    acc.append(typedKey, value);
+                });
+            } else {
+                acc.append(typedKey, filters.filters[typedKey]);
+            }
+            return acc;
+        }, new URLSearchParams());
+
+
+        const queryParams = new URLSearchParams(formattedFilters).toString();
+        const shoeList = await api.get(`/api/shoelist/?${queryParams}`);
+
+        return shoeList.data;
+        
+    } catch (error) {
+        return null;
+    }
+}
+
+export const getAvailableFilters = async () => {
+    try {
+        const response = await api.get("/api/shoe-filters/");
+        return response.data[0];
+    } catch (error) {
+        console.error("Error fetching filters:", error);
+        return null;
+    }
+}

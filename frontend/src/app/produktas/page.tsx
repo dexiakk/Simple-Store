@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import SalesBar from "../components/salesBar"
-import FiltersSideBar from "../components/filtersSideBar"
+import FiltesSideBar from "../components/filtesSideBar"
 import ItemWindow from "../components/itemWindow"
 import TopBar from "../components/TopBar"
 import Footer from "../components/Footer"
@@ -90,7 +90,7 @@ export default function page({ bgcolor }: { bgcolor: string }) {
               </div>
             </div>
             <div className="flex justify-between">
-              <FiltersSideBar onFilterChange={handleFilterChange} filters={filters}/>
+              <FiltesSideBar onFilterChange={handleFilterChange} filters={filters}/>
               <div className="grid grid-cols-3 gap-4">
               {shoes.map(shoe => (
                     <ItemWindow

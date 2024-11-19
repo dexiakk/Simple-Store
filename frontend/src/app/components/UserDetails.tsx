@@ -32,7 +32,7 @@ export default function UserDetails({ user }: UserDetailsProps) {
 
     return (
         <div className='w-full grid md:grid-cols-2 gap-7'>
-            <div className='w-full md:min-w[300px] md:max-w-[650px] flex flex-col gap-2'>
+            <div className='w-full md:max-w-[650px] flex flex-col gap-2'>
                 <label className='font-medium'>First Name</label>
                 <div className='flex'>
                     <input

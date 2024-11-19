@@ -66,7 +66,7 @@ export default function page() {
           <div className="flex flex-col sm:flex-row items-center">
             <div className="relative w-[120px] h-[120px] rounded-full overflow-hidden">
               {user?.avatar ? (
-                <Image src={user.avatar} fill alt="userAvatar" className="object-cover" />
+                <Image src={`${user.avatar}?t=${new Date().getTime()}`} fill alt="userAvatar" className="object-cover" />
               ) : (
                 <Image src={"/img/blackUser.svg"} fill alt="userBlackAvatar" className="object-contain p-8" />
               )}

@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from django.contrib.auth.models import User
 from .models import *
-from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoesSerializer
+from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeFiltersSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
@@ -99,9 +99,52 @@ class AddressDeleteView(generics.DestroyAPIView):
         except Address.DoesNotExist:
             raise Http404("Address not found")
         
-class ShoesList(generics.ListAPIView):
-    serializer_class = ShoesSerializer
+class ShoeList(generics.ListAPIView):
+    serializer_class = ShoeSerializer
     permission_classes = [AllowAny]
-    
+    authentication_classes = []
+
     def get_queryset(self):
-        return Shoe.objects.all()
+        queryset = Shoe.objects.all()
+
+        category_names = self.request.query_params.getlist('category')
+        color_names = self.request.query_params.getlist('color')
+        collection_names = self.request.query_params.getlist('collection')
+        shoe_high = self.request.query_params.getlist('shoe_high')
+        gender = self.request.query_params.getlist('gender')
+
+        if category_names:
+            queryset = queryset.filter(category__name__in=category_names)
+        if color_names:
+            queryset = queryset.filter(variants__color__name__in=color_names)
+        if collection_names:
+            queryset = queryset.filter(collection__name__in=collection_names)
+        if shoe_high:
+            queryset = queryset.filter(shoe_high__in=shoe_high)
+        if gender:
+            queryset = queryset.filter(gender__in=gender)
+
+        return queryset.distinct()
+
+
+class ShoeFiltersView(generics.ListAPIView):
+    serializer_class = ShoeFiltersSerializer
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def get_queryset(self):
+        categories = list(ShoeCategories.objects.values_list('name', flat=True))
+        collections = list(ShoeCollections.objects.values_list('name', flat=True))
+        colors = list(ShoeColors.objects.values_list('name', flat=True))
+        shoe_high = [choice[0] for choice in Shoe.SHOE_HIGH_CHOICES]
+        genders = [choice[0] for choice in Shoe.GENDER_CHOICES]
+
+        filters_data = {
+            "categories": categories,
+            "colors": colors,
+            "collections": collections,
+            "shoe_high": shoe_high,
+            "genders": genders,
+        }
+
+        return [filters_data]

@@ -1,13 +1,3 @@
-declare type Filters = {
-    category:String,
-    gender:String,
-    colors:String,
-    price_min:Number,
-    price_max:Number,
-    collection:String,
-    shoe_high:String,
-}
-
 interface AddressProps {
     id: number | null;
     street: string | null;
@@ -28,7 +18,7 @@ interface UserProps {
 }
 
 interface UserDetailsProps {
-    user: UserProps; 
+    user: UserProps;
 }
 
 interface UserAdressesProps {
@@ -38,4 +28,51 @@ interface UserAdressesProps {
 interface AddressInputFieldProps {
     address: AddressProps | null;
     type: string;
+}
+
+interface ShoeVariantProps {
+    id: number;
+    color: string;
+    main_image: string;
+    images_gallery: string[];
+}
+
+type Color = {
+    name: string;
+    value: string;
+};
+
+interface ShoeItemProps {
+    id: number;
+    bestseller: boolean;
+    manufacturer: string;
+    model: string;
+    gender: "male" | "female" | "unisex";
+    colors: Color[];
+    description: string;
+    price: string;
+    shoe_high: string;
+    variants: ShoeVariant[];
+}
+
+interface ItemWindowProps {
+    shoeList: ShoeItemProps[];
+}
+
+type Filters = {
+    category: string[];
+    collection: string[];
+    color: string[];
+    gender: string[];
+    shoe_high: string[];
+  };
+  
+  interface FiltersToSentProps {
+    filters: Filters;
+  }
+
+  interface FiltersSideBarProps {
+    availableFilters: Filters; 
+    filters: Filters;  
+    onFilterChange: (key: keyof Filters, value: string, checked: boolean) => void
   }
