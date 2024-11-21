@@ -112,6 +112,7 @@ class ShoeList(generics.ListAPIView):
         collection_names = self.request.query_params.getlist('collection')
         shoe_high = self.request.query_params.getlist('shoe_high')
         gender = self.request.query_params.getlist('gender')
+        shoe_ids = self.request.query_params.getlist('id') 
 
         if category_names:
             queryset = queryset.filter(category__name__in=category_names)
@@ -123,6 +124,8 @@ class ShoeList(generics.ListAPIView):
             queryset = queryset.filter(shoe_high__in=shoe_high)
         if gender:
             queryset = queryset.filter(gender__in=gender)
+        if shoe_ids:
+            queryset = queryset.filter(id__in=shoe_ids)
 
         return queryset.distinct()
 

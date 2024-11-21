@@ -100,11 +100,10 @@ class ShoeFiltersSerializer(serializers.Serializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         
-        # Mapowanie starych nazw na nowe (np. "categories" na "category")
         return {
-            "category": representation.get("categories", []),  # Zmieniamy "categories" na "category"
-            "color": representation.get("colors", []),  # Zmieniamy "colors" na "color"
-            "collection": representation.get("collections", []),  # Zmieniamy "collections" na "collection"
-            "shoe_high": representation.get("shoe_high", []),  # Zmieniamy "shoe_high" na "shoe_high"
-            "gender": representation.get("genders", []),  # Zmieniamy "genders" na "gender"
+            "category": representation.get("categories", []),
+            "color": representation.get("colors", []),
+            "collection": representation.get("collections", []),
+            "shoe_high": representation.get("shoe_high", []), 
+            "gender": representation.get("genders", []),
         }

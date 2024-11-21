@@ -57,3 +57,13 @@ export const getAvailableFilters = async () => {
         return null;
     }
 }
+
+export const getShoe = async (id:string) => {
+    try {
+        const shoe = await api.get(`/api/shoelist/?id=${id}`);
+
+        return shoe.data
+    } catch (error) {
+        return null
+    }
+}

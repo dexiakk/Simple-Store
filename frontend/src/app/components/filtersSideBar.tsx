@@ -31,13 +31,13 @@ export default function FiltersSideBar({ availableFilters, filters, onFilterChan
 
                 return (
                   <div>
-                  <span
-                    key={value}
-                    className={`cursor-pointer`}
-                    onClick={() => onFilterChange(key as keyof Filters, value, !isActive)}
-                  >
-                    {value}
-                  </span>
+                    <span
+                      key={value}
+                      className={`cursor-pointer ${isActive ? "border-solid border-black border-b-2 pb-[1px]" : ""}`}
+                      onClick={() => onFilterChange(key as keyof Filters, value, !isActive)}
+                    >
+                      {value}
+                    </span>
                   </div>
                 );
               })}

@@ -1,6 +1,6 @@
 "use client"
-import FiltersSideBar from '@/app/components/FiltersSideBar'
-import ItemWindow from '@/app/components/ItemWindow'
+import FiltersSideBar from '@/app/components/filtersSideBar'
+import ItemWindow from '@/app/components/itemWindow'
 import { getAvailableFilters, getShoeList } from '@/lib/userActions'
 import React, { useEffect, useState } from 'react'
 
@@ -65,7 +65,7 @@ export default function page() {
           <button>Wyczyść filtry</button>
         </div>
       </div>
-      <div className='flex'>
+      <div className='flex justify-between'>
         <div className='min-w-[200px] pr-10'>
           {availableFilters.category.length > 0 && (
             <FiltersSideBar
@@ -75,7 +75,7 @@ export default function page() {
             />
           )}
         </div>
-        <div className='w-[70%]'>
+        <div className='w-full flex justify-center'>
           {shoeList && (
             <ItemWindow shoeList={shoeList} />
           )}
