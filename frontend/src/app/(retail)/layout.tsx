@@ -1,7 +1,7 @@
-import TopBar from "../components/TopBar";
-import NavBar from "../components/NavBar";
-import SalesBar from "../components/salesBar";
-import Footer from "../components/Footer";
+import TopBar from "../components/Layout/TopBar";
+import NavBar from "../components/Layout/NavBar";
+import SalesBar from "../components/Layout/salesBar";
+import Footer from "../components/Layout/Footer";
 
 
 export default function RootLayout({

@@ -76,3 +76,9 @@ type Filters = {
     filters: Filters;  
     onFilterChange: (key: keyof Filters, value: string, checked: boolean) => void
   }
+
+  interface ShoePageGalleryProps {
+    shoe: ShoeItemProps;
+    currentVariant: number;
+    handleCurrentImageChange: (source: string) => void;
+  }

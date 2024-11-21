@@ -51,7 +51,3 @@ export const MainPageColors = [
 export const AvailableJordanSizes = [
     37, 38, 39, 40, 41, 42, 43, 44, 45, 46
 ]
-
-export const UserDetailsLabels = [
-    "Account email:", "Name:", "Lastname:", "Date of Birth:", "Prefered Gender:", "Account created at:"
-]

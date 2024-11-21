@@ -1,8 +1,8 @@
 import AuthGuard from "@/lib/AuthGuard";
-import Footer from "../components/Footer";
-import MobileFooter from "../components/MobileFooter";
-import NavBar from "../components/NavBar";
-import TopBar from "../components/TopBar";
+import Footer from "../components/Layout/Footer";
+import MobileFooter from "../components/Layout/MobileFooter";
+import NavBar from "../components/Layout/NavBar";
+import TopBar from "../components/Layout/TopBar";
 
 export default function RootLayout({
   children,

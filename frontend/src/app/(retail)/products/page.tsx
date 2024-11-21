@@ -1,6 +1,8 @@
 "use client"
-import FiltersSideBar from '@/app/components/filtersSideBar'
-import ItemWindow from '@/app/components/itemWindow'
+import MobileFiltersBar from '@/app/components/ProductsPage/MobileFiltersBar'
+import FiltersSideBar from '@/app/components/ProductsPage/filtersSideBar'
+import ItemWindow from '@/app/components/ProductsPage/itemWindow'
+import { Popover } from '@/components/ui/popover'
 import { getAvailableFilters, getShoeList } from '@/lib/userActions'
 import React, { useEffect, useState } from 'react'
 
@@ -57,16 +59,24 @@ export default function page() {
     });
   };
 
+
   return (
     <div>
       <div className='flex py-3 justify-between items-center'>
         <span className='text-[26px]'>Buty (3232)</span>
         <div>
-          <button>Wyczyść filtry</button>
+          <button className='hidden md:block'>Wyczyść filtry</button>
+          <div className='block md:hidden'>
+            <MobileFiltersBar
+              availableFilters={availableFilters}
+              filters={filters}
+              onFilterChange={handleFiltersChange}
+            />
+          </div>
         </div>
       </div>
       <div className='flex justify-between'>
-        <div className='min-w-[200px] pr-10'>
+        <div className='hidden md:block min-w-[200px] pr-10'>
           {availableFilters.category.length > 0 && (
             <FiltersSideBar
               availableFilters={availableFilters}

@@ -2,14 +2,13 @@
 import { useEffect, useState } from "react";
 import { getLoggedInUser, getUserAdresses } from "@/lib/userActions";
 import Image from "next/image";
-import LogoutButton from "@/app/components/LogoutButton";
-import { UserDetailsLabels } from "@/app/constans";
-import UserDetails from "@/app/components/UserDetails";
+import LogoutButton from "@/app/components/UserDetails/LogoutButton";
+import UserDetails from "@/app/components/UserDetails/UserDetails";
 import { Button } from "@/components/ui/button";
-import AddressArea from "@/app/components/AddressArea";
+import AddressArea from "@/app/components/UserDetails/AddressArea";
 import { ACCESS_TOKEN } from "@/lib/utils";
 import api from "@/lib/api";
-import EditUserPhoto from "@/app/components/EditUserPhoto";
+import EditUserPhoto from "@/app/components/UserDetails/EditUserPhoto";
 
 export default function page() {
 

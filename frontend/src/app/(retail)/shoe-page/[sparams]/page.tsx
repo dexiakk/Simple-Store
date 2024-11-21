@@ -1,4 +1,5 @@
 "use client"
+import ShoePageImageGallery from '@/app/components/SingleShoePage/ShoePageImageGallery'
 import { Button } from '@/components/ui/button'
 import { getShoe } from '@/lib/userActions'
 import Image from 'next/image'
@@ -70,52 +71,24 @@ export default function Page({ params }: any) {
 
   return (
     <div className='w-full flex justify-center mt-6'>
-      <div className='w-[80%] flex justify-center gap-3'>
-        <div className='flex flex-col gap-3'>
-          <div className="relative group">
+      <div className='w-[90%] flex flex-wrap justify-center gap-3 items-start'>
+        <div className='flex gap-3'>
+          <ShoePageImageGallery
+            shoe={shoe}
+            currentVariant={currentVariant}
+            handleCurrentImageChange={handleCurrentImageChange}
+          />
+          <div className='relative w-full aspect-square min-w-[550px] max-w-[600px] min-h-[550px] max-h-[600px]'>
             <Image
-              src={shoe.variants[currentVariant].main_image}
-              width={100}
-              height={100}
+              src={currentImage}
+              fill
               alt='main-image'
-              className="rounded-[10px]"
-            />
-            <div
-              onMouseEnter={() => { handleCurrentImageChange(shoe.variants[currentVariant].main_image) }}
-              className="absolute inset-0 bg-black bg-opacity-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-[10px]"
+              key={currentImage}
+              className='object-contain'
             />
           </div>
-          {shoe.variants[currentVariant].images_gallery[0] &&
-            Object.keys(shoe.variants[currentVariant].images_gallery[0])
-              .filter((key) => key.startsWith("image"))
-              .map((key) => {
-                const imageUrl = shoe.variants[currentVariant].images_gallery[0][key];
-                return (
-                  <div className="relative group" key={key}>
-                    <Image
-                      src={imageUrl}
-                      width={100}
-                      height={100}
-                      alt={key}
-                      className="rounded-[10px]"
-                    />
-                    <div
-                      onMouseEnter={() => { handleCurrentImageChange(imageUrl) }}
-                      className="absolute inset-0 bg-black bg-opacity-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-[10px]"
-                    />
-                  </div>
-                );
-              })}
         </div>
-        <div className='relative w-full aspect-square max-w-[600px] max-h-[600px]'>
-          <Image
-            src={currentImage}
-            fill
-            alt='main-image'
-            key={currentImage}
-          />
-        </div>
-        <div className='w-full max-w-[350px] flex flex-col'>
+        <div className='w-full max-w-[650px] xl:max-w-[350px] grid grid-cols-1'>
           {shoe.bestseller && (
             <span className="text-[#AA4F21] font-bold">Best Seller</span>
           )}
@@ -142,11 +115,11 @@ export default function Page({ params }: any) {
             ))}
           </div>
 
-          <span className='my-3 font-light max-w-[330px]'>{shoe.description}</span>
+          <span className='w-full pr-7 my-3 font-light'>{shoe.description}</span>
 
-          <div className='mt-3 flex flex-col gap-2'>
-            <Button className='w-full max-w-[330px] rounded-[18px]'>Dodaj do koszyka</Button>
-            <Button className='w-full max-w-[330px] bg-white text-black rounded-[18px] border-solid border-[1px] border-gray-400 hover:bg-gray-100'>Ulubione ♥</Button>
+          <div className='mt-3 flex flex-col items-center xl:items-start gap-2'>
+            <Button className='w-full max-w-[400px] xl:max-w-[330px] py-5 xl:py-3 rounded-[18px]'>Dodaj do koszyka</Button>
+            <Button className='w-full max-w-[400px] xl:max-w-[330px] bg-white text-black rounded-[18px] border-solid border-[1px] border-gray-400 hover:bg-gray-100'>Ulubione ♥</Button>
           </div>
         </div>
       </div>

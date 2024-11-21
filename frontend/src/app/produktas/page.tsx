@@ -1,12 +1,12 @@
 'use client'
 import { useState, useEffect } from "react"
 import axios from "axios"
-import SalesBar from "../components/salesBar"
+import SalesBar from "../components/Layout/salesBar"
 import FiltesSideBar from "../components/filtesSideBar"
-import ItemWindow from "../components/itemWindow"
-import TopBar from "../components/TopBar"
-import Footer from "../components/Footer"
-import NavBar from "../components/NavBar"
+import ItemWindow from "../components/ProductsPage/itemWindow"
+import TopBar from "../components/Layout/TopBar"
+import Footer from "../components/Layout/Footer"
+import NavBar from "../components/Layout/NavBar"
 
 export default function page({ bgcolor }: { bgcolor: string }) {
   const [shoes, setShoes] = useState([]);

@@ -1,4 +1,4 @@
-import AuthForm from '@/app/components/AuthForm'
+import AuthForm from '@/app/components/Auth/AuthForm'
 import React from 'react'
 
 export default function page() {

@@ -1,13 +1,13 @@
 "use client"
-import NavBar from '@/app/components/NavBar'
+import NavBar from '@/app/components/Layout/NavBar'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { MainPageColors } from '../constans'
-import ItemName from '../components/ItemName'
-import SelectSize from '../components/SelectSize'
-import ItemHistoryBackground from '../components/ItemHistoryBackground'
-import ItemNameMobile from '../components/ItemNameMobile'
-import SelectSizeMobile from '../components/SelectSizeMobile'
+import ItemName from '../components/MainPage/ItemName'
+import SelectSize from '../components/MainPage/SelectSize'
+import ItemHistoryBackground from '../components/MainPage/ItemHistoryBackground'
+import ItemNameMobile from '../components/MainPage/ItemNameMobile'
+import SelectSizeMobile from '../components/MainPage/SelectSizeMobile'
 
 export default function Home() {
   const [backgroundColor, setBackgroundColor] = useState("blueBackground")
