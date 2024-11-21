@@ -2,17 +2,26 @@
 import { Button } from '@/components/ui/button'
 import { getShoe } from '@/lib/userActions'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Page({ params }: any) {
+  const router = useRouter()
   const { sparams } = params
   const parts = sparams.split("-");
   const [id, variant] = parts;
+
+  useEffect(() => {
+    if (!id || isNaN(Number(id)) || !variant || isNaN(Number(variant))) {
+      router.push('/products/');
+      return;
+    }
+  }, [id, variant, router]);
+
   const [shoe, setShoe] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [currentVariant, setCurrentVariant] = useState(variant)
   const [currentImage, setCurrentImage] = useState('')
-
 
   useEffect(() => {
     const fetchShoe = async () => {
@@ -54,7 +63,10 @@ export default function Page({ params }: any) {
     return <div>Error: Shoe not found</div>
   }
 
-  console.log(shoe)
+  if (!shoe || !shoe.variants?.[currentVariant]) {
+    router.push('/products/');
+    return null;
+  }
 
   return (
     <div className='w-full flex justify-center mt-6'>
