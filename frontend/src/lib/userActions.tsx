@@ -67,3 +67,14 @@ export const getShoe = async (id:string) => {
         return null
     }
 }
+
+export const getUserCart = async () => {
+    try {
+        const cart = await api.get('/api/user-cart/');
+
+        return cart.data.shift();
+
+    } catch (error) {
+        return null
+    }
+}

@@ -144,3 +144,17 @@ class ShoeVariant(models.Model):
 
     class Meta:
         verbose_name_plural = "Shoe Variants"
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cart")
+    item1 = models.CharField(max_length=100, blank=True, null=True)
+    item1_variant = models.CharField(max_length=100, blank=True, null=True)
+    item2 = models.CharField(max_length=100, blank=True, null=True)
+    item2_variant = models.CharField(max_length=100, blank=True, null=True)   
+    item3 = models.CharField(max_length=100, blank=True, null=True)
+    item3_variant = models.CharField(max_length=100, blank=True, null=True)
+    item4 = models.CharField(max_length=100, blank=True, null=True)
+    item4_variant = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.username} - Cart"

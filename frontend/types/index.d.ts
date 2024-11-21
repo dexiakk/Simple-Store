@@ -82,3 +82,9 @@ type Filters = {
     currentVariant: number;
     handleCurrentImageChange: (source: string) => void;
   }
+
+  type CartItem = {
+    id: string | null
+    variant: string | null
+    shoe?: Shoe | null;
+}

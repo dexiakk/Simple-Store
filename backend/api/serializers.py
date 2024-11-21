@@ -107,3 +107,8 @@ class ShoeFiltersSerializer(serializers.Serializer):
             "shoe_high": representation.get("shoe_high", []), 
             "gender": representation.get("genders", []),
         }
+    
+class CartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cart
+        fields = ['user', 'item1', 'item1_variant', 'item2', 'item2_variant', 'item3', 'item3_variant', 'item4', 'item4_variant']

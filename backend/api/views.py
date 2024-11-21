@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from django.contrib.auth.models import User
 from .models import *
-from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeFiltersSerializer
+from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeFiltersSerializer, CartSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
@@ -151,3 +151,32 @@ class ShoeFiltersView(generics.ListAPIView):
         }
 
         return [filters_data]
+    
+
+class CartList(generics.ListAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
+class CartPartialUpdate(generics.UpdateAPIView):
+    serializer_class = CartSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = []
+
+    def get_object(self):
+        try:
+            return Cart.objects.get(user=self.request.user)
+        except Cart.DoesNotExist:
+            raise Http404("Koszyk nie znaleziony")
+    
+    def patch(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(user, data = request.data, partial = True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
