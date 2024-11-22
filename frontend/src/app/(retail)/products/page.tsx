@@ -3,10 +3,22 @@ import MobileFiltersBar from '@/app/components/ProductsPage/MobileFiltersBar'
 import FiltersSideBar from '@/app/components/ProductsPage/filtersSideBar'
 import ItemWindow from '@/app/components/ProductsPage/itemWindow'
 import { Popover } from '@/components/ui/popover'
-import { getAvailableFilters, getShoeList } from '@/lib/userActions'
+import { getAvailableFilters, getLoggedInUser, getShoeList } from '@/lib/userActions'
 import React, { useEffect, useState } from 'react'
 
 export default function page() {
+
+  const [loggedInUser, setLoggedInUser] = useState<UserProps | null>()
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await getLoggedInUser()
+      setLoggedInUser(user)
+    }
+
+  fetchUser()
+  }, [])
+
   const [shoeList, setShoeList] = useState(null)
   const [availableFilters, setAvailableFilters] = useState<Filters>({
     category: [],
@@ -21,7 +33,16 @@ export default function page() {
     color: [],
     gender: [],
     shoe_high: [],
-  })
+  });
+
+  useEffect(() => {
+    if (loggedInUser && loggedInUser.preferedGender) {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        gender: [loggedInUser.preferedGender || ""],
+      }));
+    }
+  }, [loggedInUser]); 
 
   useEffect(() => {
     const fetchFiltersList = async () => {
