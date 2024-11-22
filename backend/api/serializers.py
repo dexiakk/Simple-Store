@@ -66,18 +66,24 @@ class ShoeVariantSerializer(serializers.ModelSerializer):
             "name": obj.color.name,
             "value": obj.color.color,
         }
+    
+class ShoeSizesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoeSizes
+        fields = ['size']
         
 class ShoeSerializer(serializers.ModelSerializer):
     manufacturer = serializers.StringRelatedField()
     variants = ShoeVariantSerializer(many=True, read_only=True)
     shoe_high = serializers.CharField(source='get_shoe_high_display')
     colors = serializers.SerializerMethodField()
+    shoe_sizes = ShoeSizesSerializer(many=True, read_only=True)
     shoe_gallery = ShoeImageGallerySerializer(many=True, read_only=True)
 
     class Meta:
         model = Shoe
         fields = [
-            'id', 'manufacturer', 'model', 'price', 'description',
+            'id', 'manufacturer', 'model', 'price', 'description', 'shoe_sizes',
             'bestseller', 'gender', 'shoe_high', 'variants', 'colors', 'shoe_gallery', 'category', 'collection', 
         ]
         
@@ -111,4 +117,7 @@ class ShoeFiltersSerializer(serializers.Serializer):
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
-        fields = ['item1', 'item1_variant', 'item2', 'item2_variant', 'item3', 'item3_variant', 'item4', 'item4_variant']
+        fields = ['item1', 'item1_variant', 'item1_size', 
+                  'item2', 'item2_variant', 'item2_size', 
+                  'item3', 'item3_variant', 'item3_size', 
+                  'item4', 'item4_variant', 'item4_size']

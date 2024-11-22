@@ -7,7 +7,6 @@ import { getLoggedInUser, getShoe, getUserCart } from "@/lib/userActions"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
 import api from "@/lib/api"
 import { ACCESS_TOKEN } from "@/lib/utils"
 
@@ -35,10 +34,10 @@ useEffect(() => {
             }
 
             const items = [
-                { id: cart.item1, variant: cart.item1_variant },
-                { id: cart.item2, variant: cart.item2_variant },
-                { id: cart.item3, variant: cart.item3_variant },
-                { id: cart.item4, variant: cart.item4_variant },
+                { id: cart.item1, variant: cart.item1_variant, size: cart.item1_size },
+                { id: cart.item2, variant: cart.item2_variant, size: cart.item2_size},
+                { id: cart.item3, variant: cart.item3_variant, size: cart.item3_size },
+                { id: cart.item4, variant: cart.item4_variant, size: cart.item4_size },
             ];
             setCartItems(items);
         };
@@ -68,13 +67,14 @@ useEffect(() => {
             const updatedCart = { ...cart };
             updatedCart[`item${index + 1}`] = null;
             updatedCart[`item${index + 1}_variant`] = null;
+            updatedCart[`item${index +1}_size`] = null;
 
             await api.patch("/api/user-cart/update/", updatedCart, {
                 headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
             });
 
             setCartItems((prevItems) =>
-                prevItems.map((item, i) => (i === index ? { id: null, variant: null } : item))
+                prevItems.map((item, i) => (i === index ? { id: null, variant: null, size: null } : item))
             );
         } catch (error) {
             console.error("Błąd przy usuwaniu przedmiotu z koszyka:", error);
@@ -139,8 +139,11 @@ useEffect(() => {
                                                 {item.shoe.manufacturer} {item.shoe.model}
                                             </span>
                                             <div className="flex">
+                                                <div className="mr-1 text-[15px] text-gray-600 first-letter:uppercase">
+                                                    {item.shoe.gender}&nbsp;|
+                                                </div>
                                                 <div className="mr-2 text-[15px] text-gray-600 first-letter:uppercase">
-                                                    {item.shoe.gender}
+                                                    Size:&nbsp;{item.size}
                                                 </div>
                                                 <span className="text-[15px] font-semibold">${item.shoe.price}</span>
                                             </div>

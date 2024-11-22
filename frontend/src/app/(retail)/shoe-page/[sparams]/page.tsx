@@ -1,5 +1,6 @@
 "use client"
 import ShoePageImageGallery from '@/app/components/SingleShoePage/ShoePageImageGallery'
+import Sizes from '@/app/components/SingleShoePage/Sizes'
 import { Button } from '@/components/ui/button'
 import api from '@/lib/api'
 import { getShoe, getUserCart } from '@/lib/userActions'
@@ -25,6 +26,8 @@ export default function Page({ params }: any) {
   const [loading, setLoading] = useState(true)
   const [currentVariant, setCurrentVariant] = useState(variant)
   const [currentImage, setCurrentImage] = useState('')
+  const [currentSize, setCurrentSize] = useState<string | null>(null)
+  const [sizeErrorVisibility, setSizeErrorVisibility] = useState("hidden")
 
   useEffect(() => {
     const fetchShoe = async () => {
@@ -39,7 +42,6 @@ export default function Page({ params }: any) {
         }
       }
     }
-
 
     fetchShoe()
   }, [id])
@@ -71,8 +73,22 @@ export default function Page({ params }: any) {
     return null;
   }
 
+  const handleSizeSelect = (size: string) => {
+    // Sprawdzamy, czy wybrany rozmiar różni się od obecnego
+    if (size !== currentSize) {
+      setCurrentSize(size);
+    }
+  };
+
   const handleAddToCart = async (id: string, variant: string) => {
     try {
+        if (!currentSize) {
+          if (sizeErrorVisibility === "hidden") {
+            setSizeErrorVisibility("block");
+          }
+          return;
+        }
+
         const cart = await getUserCart();
         const updatedCart = { ...cart };
 
@@ -82,10 +98,13 @@ export default function Page({ params }: any) {
             if (updatedCart[`item${i}`] === null) {
                 updatedCart[`item${i}`] = id;
                 updatedCart[`item${i}_variant`] = parseInt(variant)+1;
+                updatedCart[`item${i}_size`] = currentSize;
                 isCartFull = false;
                 break;
             }
         }
+
+        console.log(updatedCart)
 
         if (isCartFull) {
             alert("Your Cart is full.");
@@ -146,6 +165,9 @@ export default function Page({ params }: any) {
           </div>
 
           <span className='w-full pr-7 my-3 font-light'>{shoe.description}</span>
+
+          <Sizes shoe_sizes={shoe.shoe_sizes} handleSizeSelect={handleSizeSelect}/>
+          <span className={`text-red-500 font-light ${sizeErrorVisibility}`}>Please choose your size.</span>
 
           <div className='mt-3 flex flex-col items-center xl:items-start gap-2'>
             <Button onClick={() => {handleAddToCart(id, currentVariant)}} className='w-full max-w-[400px] xl:max-w-[330px] py-5 xl:py-3 rounded-[18px]'>Dodaj do koszyka</Button>

@@ -86,5 +86,11 @@ type Filters = {
   type CartItem = {
     id: string | null
     variant: string | null
+    size: string | null; 
     shoe?: Shoe | null;
+}
+
+interface SizesProps {
+    shoe_sizes: { size: string }[];
+    handleSizeSelect: (size: string) => void
 }
