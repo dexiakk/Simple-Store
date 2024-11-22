@@ -1,7 +1,9 @@
 "use client"
 import ShoePageImageGallery from '@/app/components/SingleShoePage/ShoePageImageGallery'
 import { Button } from '@/components/ui/button'
-import { getShoe } from '@/lib/userActions'
+import api from '@/lib/api'
+import { getShoe, getUserCart } from '@/lib/userActions'
+import { ACCESS_TOKEN } from '@/lib/utils'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -69,6 +71,34 @@ export default function Page({ params }: any) {
     return null;
   }
 
+  const handleAddToCart = async (id: string, variant: string) => {
+    try {
+        const cart = await getUserCart();
+        const updatedCart = { ...cart };
+
+        let isCartFull = true;
+
+        for (let i = 1; i < 5; i++) {
+            if (updatedCart[`item${i}`] === null) {
+                updatedCart[`item${i}`] = id;
+                updatedCart[`item${i}_variant`] = parseInt(variant)+1;
+                isCartFull = false;
+                break;
+            }
+        }
+
+        if (isCartFull) {
+            alert("Your Cart is full.");
+        } else {
+            await api.patch("/api/user-cart/update/", updatedCart, {
+                headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
+            });
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error("Błąd przy dodawaniu przedmiotu do koszyka:", error);
+    }
+};
   return (
     <div className='w-full flex justify-center mt-6'>
       <div className='w-[90%] flex flex-wrap justify-center gap-3 items-start'>
@@ -80,7 +110,7 @@ export default function Page({ params }: any) {
           />
           <div className='relative w-full aspect-square min-w-[550px] max-w-[600px] min-h-[550px] max-h-[600px]'>
             <Image
-              src={currentImage}
+              src={currentImage || '/img/default-shoe-image.png'}
               fill
               alt='main-image'
               key={currentImage}
@@ -118,7 +148,7 @@ export default function Page({ params }: any) {
           <span className='w-full pr-7 my-3 font-light'>{shoe.description}</span>
 
           <div className='mt-3 flex flex-col items-center xl:items-start gap-2'>
-            <Button className='w-full max-w-[400px] xl:max-w-[330px] py-5 xl:py-3 rounded-[18px]'>Dodaj do koszyka</Button>
+            <Button onClick={() => {handleAddToCart(id, currentVariant)}} className='w-full max-w-[400px] xl:max-w-[330px] py-5 xl:py-3 rounded-[18px]'>Dodaj do koszyka</Button>
             <Button className='w-full max-w-[400px] xl:max-w-[330px] bg-white text-black rounded-[18px] border-solid border-[1px] border-gray-400 hover:bg-gray-100'>Ulubione ♥</Button>
           </div>
         </div>

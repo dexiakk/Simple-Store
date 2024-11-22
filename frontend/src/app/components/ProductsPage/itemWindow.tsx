@@ -32,7 +32,6 @@ export default function ItemWindow({ shoeList }: ItemWindowProps) {
   };
 
   const handleMouseLeave = (shoeIndex: number) => {
-    console.log(shoeIndex)
     const updatedVisibility = [...galleryVisible];
     updatedVisibility[shoeIndex] = "hidden";
     setGalleryVisible(updatedVisibility);
@@ -55,7 +54,7 @@ export default function ItemWindow({ shoeList }: ItemWindowProps) {
             onMouseLeave={() => handleMouseLeave(shoeIndex)}
           >
             <div className="relative w-full aspect-square max-w-[600px] max-h-[600px]">
-              <Image src={currentImages[shoeIndex]} fill alt="shoeImage" className="object-contain" />
+              <Image src={currentImages[shoeIndex] || '/img/default-shoe-image.png'} fill alt="shoeImage" className="object-contain" />
             </div>
 
             <div className={`${galleryVisible[shoeIndex]} justify-between mt-2`}>

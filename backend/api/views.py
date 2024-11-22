@@ -6,6 +6,10 @@ from django.contrib.auth.models import User
 from .models import *
 from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeFiltersSerializer, CartSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.core.exceptions import PermissionDenied
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
@@ -35,20 +39,6 @@ class UserDetailsPartialUpdateView(generics.UpdateAPIView):
         serializer = self.get_serializer(user_details, data=request.data, partial=True)
 
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def patch(self, request, *args, **kwargs):
-        user_details = self.get_object()
-        old_avatar = user_details.avatar
-
-        serializer = self.get_serializer(user_details, data=request.data, partial=True)
-
-        if serializer.is_valid():
-            if old_avatar and os.path.isfile(old_avatar.path):
-                os.remove(old_avatar.path)
-
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -164,19 +154,15 @@ class CartList(generics.ListAPIView):
 class CartPartialUpdate(generics.UpdateAPIView):
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
-    authentication_classes = []
+    authentication_classes = [JWTAuthentication]
 
     def get_object(self):
         try:
-            return Cart.objects.get(user=self.request.user)
+            cart = Cart.objects.get(user=self.request.user)
         except Cart.DoesNotExist:
-            raise Http404("Koszyk nie znaleziony")
-    
-    def patch(self, request, *args, **kwargs):
-        user = self.get_object()
-        serializer = self.get_serializer(user, data = request.data, partial = True)
+            raise Http404("Koszyk nie został znaleziony")
         
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if cart.user != self.request.user:
+            raise PermissionDenied("Nie masz dostępu do tego koszyka.")
+        
+        return cart

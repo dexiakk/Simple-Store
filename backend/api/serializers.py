@@ -111,4 +111,4 @@ class ShoeFiltersSerializer(serializers.Serializer):
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
-        fields = ['user', 'item1', 'item1_variant', 'item2', 'item2_variant', 'item3', 'item3_variant', 'item4', 'item4_variant']
+        fields = ['item1', 'item1_variant', 'item2', 'item2_variant', 'item3', 'item3_variant', 'item4', 'item4_variant']

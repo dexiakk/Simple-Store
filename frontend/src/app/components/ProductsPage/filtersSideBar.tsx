@@ -22,7 +22,6 @@ export default function FiltersSideBar({ availableFilters, filters, onFilterChan
           setIsArrowActive(!isArrowActive);
         };
 
-        // Warunek dla renderowania
         if (key === "category") {
           return (
             <div key={key} className="flex flex-col items-start mb-5 font-semibold gap-1">

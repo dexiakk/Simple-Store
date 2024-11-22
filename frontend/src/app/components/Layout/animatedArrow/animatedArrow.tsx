@@ -12,7 +12,7 @@ export default function AnimatedArrow({isActive, onClick} : {isActive:Boolean, o
     <div
       className={`arrow ${isActive ? 'active' : ''}`}
       onClick={(e) => {
-        e.stopPropagation(); // Zatrzymanie propagacji kliknięcia
+        e.stopPropagation();
         onClick();
       }}>
         <span className="arrow"></span><span></span></div>

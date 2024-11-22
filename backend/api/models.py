@@ -120,12 +120,12 @@ class Shoe(models.Model):
         verbose_name_plural = "Shoes"
         
 class ShoeImageGallery(models.Model):
-    shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE, related_name='images_gallery')
     color = models.CharField(max_length=10, default="black")
     image1 = models.ImageField(upload_to=shoe_gallery_upload_to, null=True)
     image2 = models.ImageField(upload_to=shoe_gallery_upload_to, null=True)
     image3 = models.ImageField(upload_to=shoe_gallery_upload_to, null=True)
     image4 = models.ImageField(upload_to=shoe_gallery_upload_to, null=True)
+    shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE, related_name='images_gallery')
 
     def __str__(self):
         return f"Image gallery for {self.shoe.model} - {self.color} - {self.shoe.gender}"
