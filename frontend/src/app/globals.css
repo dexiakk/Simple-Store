@@ -101,15 +101,20 @@
   box-shadow: 0px 0px 42px -18px rgba(0, 0, 0, 1);
 }
 
-.textShadow{
+.textShadow {
   text-shadow: 0px 0px 6px rgba(66, 68, 90, 1);
 }
 
-.itemNameCustomMedia{
-  @media (min-width: 1800px) { display:flex }
+.itemNameCustomMedia {
+  @media (min-width: 1800px) {
+    display: flex
+  }
 }
-.itemNameMobileCustomMedia{
-  @media (min-width: 1800px) { display:none }
+
+.itemNameMobileCustomMedia {
+  @media (min-width: 1800px) {
+    display: none
+  }
 }
 
 @layer base {
@@ -140,6 +145,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -167,10 +173,12 @@
     --chart-5: 340 75% 55%;
   }
 }
+
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -179,6 +187,7 @@
 input[type="checkbox"]:checked {
   @apply bg-black border-black;
 }
+
 input[type="checkbox"]:checked::before {
   content: "✔";
   color: white;
@@ -189,6 +198,16 @@ input[type="checkbox"]:checked::before {
   height: 100%;
   font-size: 0.75rem;
 }
+
 input[type="checkbox"] {
   @apply appearance-none h-5 w-5 border-2 border-gray-300 rounded-sm flex items-center justify-center;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  outline: none;
+  background: none;
 }

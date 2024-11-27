@@ -48,7 +48,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`relative size-full flex justify-center text-white overflow-y-scroll 2xl:overflow-hidden backgroundTransition backgroundShadow ${backgroundColor}`}>
+    <div className={`relative size-full flex justify-center text-white overflow-y-scroll backgroundTransition backgroundShadow ${backgroundColor}`}>
       <div className='w-[90%]'>
         <NavBar
           color="white"

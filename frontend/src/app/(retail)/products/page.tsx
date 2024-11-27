@@ -1,25 +1,14 @@
-"use client"
-import MobileFiltersBar from '@/app/components/ProductsPage/MobileFiltersBar'
-import FiltersSideBar from '@/app/components/ProductsPage/filtersSideBar'
-import ItemWindow from '@/app/components/ProductsPage/itemWindow'
-import { Popover } from '@/components/ui/popover'
-import { getAvailableFilters, getLoggedInUser, getShoeList } from '@/lib/userActions'
-import React, { useEffect, useState } from 'react'
+"use client";
 
-export default function page() {
+import MobileFiltersBar from "@/app/components/ProductsPage/MobileFiltersBar";
+import FiltersSideBar from "@/app/components/ProductsPage/filtersSideBar";
+import ItemWindow from "@/app/components/ProductsPage/itemWindow";
+import { getAvailableFilters, getLoggedInUser, getShoeList } from "@/lib/userActions";
+import React, { useEffect, useState } from "react";
 
-  const [loggedInUser, setLoggedInUser] = useState<UserProps | null>()
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const user = await getLoggedInUser()
-      setLoggedInUser(user)
-    }
-
-  fetchUser()
-  }, [])
-
-  const [shoeList, setShoeList] = useState(null)
+export default function Page() {
+  const [loggedInUser, setLoggedInUser] = useState<UserProps | null>(null);
+  const [shoeList, setShoeList] = useState<ShoeItemProps[] | null>(null);
   const [availableFilters, setAvailableFilters] = useState<Filters>({
     category: [],
     collection: [],
@@ -36,36 +25,51 @@ export default function page() {
   });
 
   useEffect(() => {
-    if (loggedInUser && loggedInUser.preferedGender) {
-      setFilters((prevFilters) => ({
-        ...prevFilters,
-        gender: [loggedInUser.preferedGender || ""],
-      }));
-    }
-  }, [loggedInUser]); 
+    const fetchUser = async () => {
+      try {
+        const user = await getLoggedInUser();
+        setLoggedInUser(user);
+
+        if (user?.preferedGender) {
+          setFilters((prevFilters) => ({
+            ...prevFilters,
+            gender: [user.preferedGender],
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching logged-in user:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   useEffect(() => {
-    const fetchFiltersList = async () => {
-      const availableFilters = await getAvailableFilters()
+    const fetchFilters = async () => {
+      try {
+        const filters = await getAvailableFilters();
+        setAvailableFilters(filters);
+      } catch (error) {
+        console.error("Error fetching filters:", error);
+      }
+    };
 
-      setAvailableFilters(availableFilters)
-    }
-
-    fetchFiltersList()
-
-  }, [])
+    fetchFilters();
+  }, []);
 
   useEffect(() => {
-    const fetchShoeList = async () => {
-      const shoe = await getShoeList({ filters })
+    const fetchShoes = async () => {
+      try {
+        const shoes = await getShoeList({ filters });
+        setShoeList(shoes);
+      } catch (error) {
+        console.error("Error fetching shoe list:", error);
+        setShoeList([]);
+      }
+    };
 
-      setShoeList(shoe)
-    }
-
-    fetchShoeList()
-
-  }, [filters])
-
+    fetchShoes();
+  }, [filters]);
 
   const handleFiltersChange = (key: keyof Filters, value: string, checked: boolean) => {
     setFilters((prevFilters) => {
@@ -80,14 +84,28 @@ export default function page() {
     });
   };
 
-
   return (
     <div>
-      <div className='flex py-3 justify-between items-center'>
-        <span className='text-[26px]'>Buty (3232)</span>
+      <div className="flex py-3 justify-between items-center">
+        <span className="text-[26px]">
+          Buty ({shoeList ? shoeList.length : 0})
+        </span>
         <div>
-          <button className='hidden md:block'>Wyczyść filtry</button>
-          <div className='block md:hidden'>
+          <button
+            className="hidden md:block"
+            onClick={() =>
+              setFilters({
+                category: [],
+                collection: [],
+                color: [],
+                gender: [],
+                shoe_high: [],
+              })
+            }
+          >
+            Wyczyść filtry
+          </button>
+          <div className="block md:hidden">
             <MobileFiltersBar
               availableFilters={availableFilters}
               filters={filters}
@@ -96,8 +114,8 @@ export default function page() {
           </div>
         </div>
       </div>
-      <div className='flex justify-between'>
-        <div className='hidden md:block min-w-[200px] pr-10'>
+      <div className="flex justify-between">
+        <div className="hidden md:block min-w-[200px] pr-10">
           {availableFilters.category.length > 0 && (
             <FiltersSideBar
               availableFilters={availableFilters}
@@ -106,12 +124,14 @@ export default function page() {
             />
           )}
         </div>
-        <div className='w-full flex justify-center'>
-          {shoeList && (
+        <div className="w-full flex justify-center">
+          {shoeList ? (
             <ItemWindow shoeList={shoeList} />
+          ) : (
+            <p>Loading products...</p>
           )}
         </div>
       </div>
     </div>
-  )
+  );
 }

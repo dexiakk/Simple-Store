@@ -15,18 +15,21 @@ from rest_framework import status
 from django.http import Http404
 import os
 
+
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
-    
+
+
 class UserDetailsList(generics.ListAPIView):
     serializer_class = UserDetailsSerializer
     permission_classes = [IsAuthenticated]
-    
+
     def get_queryset(self):
         return UserDetails.objects.filter(user=self.request.user)
-    
+
+
 class UserDetailsPartialUpdateView(generics.UpdateAPIView):
     serializer_class = UserDetailsSerializer
     permission_classes = [IsAuthenticated]
@@ -36,47 +39,59 @@ class UserDetailsPartialUpdateView(generics.UpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
         user_details = self.get_object()
-        serializer = self.get_serializer(user_details, data=request.data, partial=True)
+        new_password = request.data.get("password", None)
+
+        if new_password:
+            user = self.request.user
+            user.set_password(new_password)
+            user.save()
+
+        serializer = self.get_serializer(
+            user_details, data=request.data, partial=True)
 
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 class AddressListCreate(generics.ListCreateAPIView):
     serializer_class = AddressSerializer
     permission_classes = [IsAuthenticated]
-    
+
     def get_queryset(self):
         return Address.objects.filter(user=self.request.user)
-    
+
     def perform_create(self, serializer):
         if serializer.is_valid():
             serializer.save(user=self.request.user)
         else:
             print(serializer.errors)
-    
+
+
 class AddressPartialUpdateView(generics.UpdateAPIView):
     serializer_class = AddressSerializer
     permission_classes = [IsAuthenticated]
-    
+
     def get_object(self):
         address_id = self.kwargs['id']
-        
+
         try:
             return Address.objects.get(id=address_id, user=self.request.user)
         except Address.DoesNotExist:
             raise Http404("Address not found")
-    
+
     def patch(self, request, *args, **kwargs):
         user_address = self.get_object()
-        serializer = self.get_serializer(user_address, data = request.data, partial = True)
-        
+        serializer = self.get_serializer(
+            user_address, data=request.data, partial=True)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 class AddressDeleteView(generics.DestroyAPIView):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
@@ -88,7 +103,8 @@ class AddressDeleteView(generics.DestroyAPIView):
             return Address.objects.get(id=address_id, user=self.request.user)
         except Address.DoesNotExist:
             raise Http404("Address not found")
-        
+
+
 class ShoeList(generics.ListAPIView):
     serializer_class = ShoeSerializer
     permission_classes = [AllowAny]
@@ -102,7 +118,7 @@ class ShoeList(generics.ListAPIView):
         collection_names = self.request.query_params.getlist('collection')
         shoe_high = self.request.query_params.getlist('shoe_high')
         gender = self.request.query_params.getlist('gender')
-        shoe_ids = self.request.query_params.getlist('id') 
+        shoe_ids = self.request.query_params.getlist('id')
 
         if category_names:
             queryset = queryset.filter(category__name__in=category_names)
@@ -126,8 +142,10 @@ class ShoeFiltersView(generics.ListAPIView):
     authentication_classes = []
 
     def get_queryset(self):
-        categories = list(ShoeCategories.objects.values_list('name', flat=True))
-        collections = list(ShoeCollections.objects.values_list('name', flat=True))
+        categories = list(
+            ShoeCategories.objects.values_list('name', flat=True))
+        collections = list(
+            ShoeCollections.objects.values_list('name', flat=True))
         colors = list(ShoeColors.objects.values_list('name', flat=True))
         shoe_high = [choice[0] for choice in Shoe.SHOE_HIGH_CHOICES]
         genders = [choice[0] for choice in Shoe.GENDER_CHOICES]
@@ -141,7 +159,7 @@ class ShoeFiltersView(generics.ListAPIView):
         }
 
         return [filters_data]
-    
+
 
 class CartList(generics.ListAPIView):
     queryset = Cart.objects.all()
@@ -150,6 +168,7 @@ class CartList(generics.ListAPIView):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
+
 
 class CartPartialUpdate(generics.UpdateAPIView):
     serializer_class = CartSerializer
@@ -161,8 +180,8 @@ class CartPartialUpdate(generics.UpdateAPIView):
             cart = Cart.objects.get(user=self.request.user)
         except Cart.DoesNotExist:
             raise Http404("Koszyk nie został znaleziony")
-        
+
         if cart.user != self.request.user:
             raise PermissionDenied("Nie masz dostępu do tego koszyka.")
-        
+
         return cart
