@@ -38,6 +38,7 @@ class UserDetails(models.Model):
     dateOfBirth = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     avatar = models.ImageField(upload_to=avatar_upload_to, null=True, blank=True)
+    permissions = models.CharField(max_length=20, default="user", null=False, blank=False)
 
     def __str__(self):
         return f"{self.user.username} - Details"

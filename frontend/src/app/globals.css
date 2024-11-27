@@ -211,3 +211,7 @@ select {
   outline: none;
   background: none;
 }
+
+img {
+  height: auto;
+}

@@ -19,7 +19,7 @@ export default function NavBarIcons({ color, size }: NavBarIconProps) {
                 <div className={`flex items-center ${gap}`}>
 
                     <Link href={"/auth"}>
-                        <Image src={"/img/user.svg"} alt="user" width={userIconSize} height={userIconSize} />
+                        <Image src={"/img/user.svg"} alt="user" width={userIconSize} height={userIconSize} style={{height: userIconSize, width: userIconSize }}/>
                     </Link>
 
                     <Cart color={color} size={cartIconSize} />
@@ -28,7 +28,7 @@ export default function NavBarIcons({ color, size }: NavBarIconProps) {
                 <div className="flex items-center gap-3">
 
                     <Link href={"/auth"}>
-                        <Image src={"/img/blackUser.svg"} alt="user" width={userIconSize} height={userIconSize} />
+                        <Image src={"/img/blackUser.svg"} alt="user" width={userIconSize} height={userIconSize} sizes="(max-width: 120px) 100vw, 50vw" style={{height: userIconSize, width: userIconSize }} />
                     </Link>
 
                     <Cart color={color} size={cartIconSize} />

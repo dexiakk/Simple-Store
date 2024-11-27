@@ -47,6 +47,7 @@ export default function UserDetails({ user }: UserDetailsProps) {
                 <label className='font-medium'>First Name</label>
                 <div className='flex'>
                     <input
+                        id='FirstName'
                         type='text'
                         value={newFirstName || ''}
                         onChange={(e) => setNewFirstName(e.target.value)}
@@ -65,6 +66,7 @@ export default function UserDetails({ user }: UserDetailsProps) {
                 <label className='font-medium'>Last Name</label>
                 <div className='flex'>
                     <input
+                        id='LastName'
                         type='text'
                         value={newLastName || ''}
                         onChange={(e) => setNewLastName(e.target.value)}
@@ -83,6 +85,7 @@ export default function UserDetails({ user }: UserDetailsProps) {
                 <label className='font-medium'>Change Password</label>
                 <div className='flex'>
                     <input
+                        id='Password'
                         type='password'
                         placeholder='New Password'
                         className='w-full min-w-[100px] bg-[#F9F9F9] py-2 pl-5 rounded-l-[7px] rounded-r-none flex-1'

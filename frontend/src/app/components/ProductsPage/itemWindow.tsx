@@ -54,7 +54,13 @@ export default function ItemWindow({ shoeList }: ItemWindowProps) {
             onMouseLeave={() => handleMouseLeave(shoeIndex)}
           >
             <div className="relative w-full aspect-square max-w-[600px] max-h-[600px]">
-              <Image src={currentImages[shoeIndex] || '/img/default-shoe-image.png'} fill alt="shoeImage" className="object-contain" />
+              <Image
+                src={currentImages[shoeIndex] || '/img/default-shoe-image.png'}
+                fill
+                alt="shoeImage"
+                className="object-contain"
+                sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
             </div>
 
             <div className={`${galleryVisible[shoeIndex]} justify-between mt-2`}>

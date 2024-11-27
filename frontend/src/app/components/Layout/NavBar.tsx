@@ -16,7 +16,7 @@ export default function NavBar({ color }: { color: String }) {
                     </Link>
                 ) : (
                     <Link href={"/"}>
-                        <Image src={"/img/blackLogo.png"} alt="logo" width={70} height={130} />
+                        <Image src={"/img/blackLogo.png"} alt="logo" width={70} height={70}/>
                     </Link>
                 )}
             </div>

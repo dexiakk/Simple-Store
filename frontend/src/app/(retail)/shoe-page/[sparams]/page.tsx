@@ -74,7 +74,6 @@ export default function Page({ params }: any) {
   }
 
   const handleSizeSelect = (size: string) => {
-    // Sprawdzamy, czy wybrany rozmiar różni się od obecnego
     if (size !== currentSize) {
       setCurrentSize(size);
     }
@@ -134,6 +133,8 @@ export default function Page({ params }: any) {
               alt='main-image'
               key={currentImage}
               className='object-contain'
+              sizes="(max-width: 1200px) 100vw, 33vw"
+              priority
             />
           </div>
         </div>

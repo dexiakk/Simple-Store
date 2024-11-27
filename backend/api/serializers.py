@@ -37,8 +37,8 @@ class UserDetailsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserDetails
-        fields = ['username', 'firstName', 'lastName', 'preferedGender', 'dateOfBirth', 'created_at', 'avatar']
-        read_only_fields = ['user', 'dateOfBirth', 'created_at']
+        fields = ['permissions','username', 'firstName', 'lastName', 'preferedGender', 'dateOfBirth', 'created_at', 'avatar']
+        read_only_fields = ['permissions', 'user', 'dateOfBirth', 'created_at']
 
     def get_username(self, obj):
         return obj.user.username if obj.user else None

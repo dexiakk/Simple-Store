@@ -10,24 +10,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="w-full h-screen">
-        <TopBar />
-        <div className="flex justify-center">
-          <div className="w-[90%]">
-            <NavBar
-              color="black"
-            />
-          </div>
+    <section>
+      <TopBar />
+      <div className="flex justify-center">
+        <div className="w-[90%]">
+          <NavBar
+            color="black"
+          />
         </div>
-        <SalesBar />
-        <div className="w-full flex justify-center">
-          <div className="w-[90%]">
-            {children}
-          </div>
+      </div>
+      <SalesBar />
+      <div className="w-full flex justify-center">
+        <div className="w-[90%]">
+          {children}
         </div>
-        <Footer />
-      </body>
-    </html>
+      </div>
+      <Footer />
+    </section>
   );
 }

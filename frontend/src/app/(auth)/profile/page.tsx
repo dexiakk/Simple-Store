@@ -59,15 +59,16 @@ export default function page() {
     <div className="w-full flex justify-center">
       <div className="w-[70%] flex flex-col gap-7">
         <div className="w-full flex justify-center items-center mt-10 mb-4 md:mb-0">
-          <Image src={"/img/blackLogoFixedHeight.png"} width={130} height={130} alt="blackLogo" className="ml-8" />
+          <Image src={"/img/blackLogoFixedHeight.png"} width={130} height={70} style={{width:130, height:70}} alt="blackLogo" className="ml-8" priority={true}/>
         </div>
         <div className="flex flex-wrap flex-col sm:flex-row justify-center sm:justify-between items-center">
           <div className="flex flex-col sm:flex-row items-center">
             <div className="relative w-[120px] h-[120px] rounded-full overflow-hidden">
               {user?.avatar ? (
-                <Image src={`${user.avatar}?t=${new Date().getTime()}`} fill alt="userAvatar" className="object-cover" />
+                <Image src={`${user.avatar}?t=${new Date().getTime()}`} fill
+                sizes="(max-width: 120px) 100vw, 50vw" alt="userAvatar" className="object-cover" priority={true}/>
               ) : (
-                <Image src={"/img/blackUser.svg"} fill alt="userBlackAvatar" className="object-contain p-8" />
+                <Image src={"/img/blackUser.svg"} fill sizes="(max-width: 120px) 100vw, 50vw" alt="userBlackAvatar" className="object-contain p-8" />
               )}
             </div>
             <div className="flex flex-col ml-3 mt-3 sm:mt-0 text-center sm:text-start">

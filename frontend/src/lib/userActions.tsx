@@ -1,14 +1,18 @@
 import api from "@/lib/api";
 
+
 export const getLoggedInUser = async () => {
     try {
         const user = await api.get("/api/userdetails/")
             .then((res) => res.data)
             .then((data) => data.shift())
 
+            if (!user) {
+                return null;
+            }
         return user;
     } catch (error) {
-        return null;
+        return Promise.resolve(error);
     }
 }
 
@@ -18,7 +22,7 @@ export const getUserAdresses = async () => {
 
         return addresses.data;
     } catch (error) {
-        return null;
+        return null
     }
 }
 
@@ -44,7 +48,7 @@ export const getShoeList = async (filters:FiltersToSentProps) => {
         return shoeList.data;
         
     } catch (error) {
-        return null;
+        return null
     }
 }
 
@@ -53,8 +57,7 @@ export const getAvailableFilters = async () => {
         const response = await api.get("/api/shoe-filters/");
         return response.data[0];
     } catch (error) {
-        console.error("Error fetching filters:", error);
-        return null;
+        return null
     }
 }
 

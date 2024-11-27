@@ -10,9 +10,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
       <AuthGuard>
-      <body className="w-full h-screen">
+      <section className="w-full h-screen">
         <TopBar />
         <div className="flex justify-center">
           <div className="w-[90%]">
@@ -24,8 +23,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <MobileFooter />
-      </body>
+      </section>
       </AuthGuard>
-    </html>
   );
 }

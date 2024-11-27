@@ -29,7 +29,7 @@ export default function FiltersSideBar({ availableFilters, filters, onFilterChan
                 const isActive = filters[key as keyof Filters].includes(value);
 
                 return (
-                  <div>
+                  <div key={value}>
                     <span
                       key={value}
                       className={`cursor-pointer ${isActive ? "border-solid border-black border-b-2 pb-[1px]" : ""}`}

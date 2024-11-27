@@ -4,16 +4,17 @@ import { useEffect, useState } from 'react';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/lib/utils';
 import { jwtDecode } from 'jwt-decode';
 import api from '@/lib/api';
+import { getLoggedInUser } from './userActions';
 
 
 interface AuthGuardProps {
     children: React.ReactNode;
 }
 
-
 const AuthGuard = ({ children }: AuthGuardProps) => {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false);
+    const [isUserAdmin, setIsUserAdmin] = useState(false)
 
 
     useEffect(() => {
@@ -38,7 +39,6 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
 
 
         } catch (error) {
-            console.log(error);
             setIsAuthorized(false)
         }
     }
@@ -50,9 +50,8 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
 
         if (!token) {
             refreshToken()
-            
-            if(token)
-            {
+
+            if (token) {
                 setIsAuthorized(true)
                 return
             }
@@ -71,16 +70,35 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
         tokenExpiration! < now ? refreshToken() : setIsAuthorized(true)
     }
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user: UserProps = await getLoggedInUser()
+
+            if (user) {
+                user.permissions === "admin" ? setIsUserAdmin(true) : setIsUserAdmin(false)
+            }
+        }
+
+        fetchUser()
+    }, [isAuthorized])
+
+
 
     useEffect(() => {
         if (!isAuthorized) {
             router.push("/auth/")
         }
         else {
-            router.push("/profile/")
+
+            if (isUserAdmin) {
+                router.push("/admin-panel/")
+            }
+            else {
+                router.push("/profile/")
+            }
         }
 
-    }, [isAuthorized, router]);
+    }, [isAuthorized, isUserAdmin, router]);
 
 
     return <>{children}</>;
