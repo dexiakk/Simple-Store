@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from django.contrib.auth.models import User
 from .models import *
-from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeFiltersSerializer, CartSerializer
+from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeFiltersSerializer, CartSerializer, OrdersSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.exceptions import PermissionDenied
@@ -185,3 +185,10 @@ class CartPartialUpdate(generics.UpdateAPIView):
             raise PermissionDenied("Nie masz dostępu do tego koszyka.")
 
         return cart
+
+class OrdersList(generics.ListAPIView):
+    serializer_class = OrdersSerializer
+    permission_classes = []
+
+    def get_queryset(self):
+        return Orders.objects.all()

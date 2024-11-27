@@ -9,6 +9,7 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import api from "@/lib/api"
 import { ACCESS_TOKEN } from "@/lib/utils"
+import SignleShoeItem from "./SignleShoeItem"
 
 export default function Cart({ color, size }: { color: String, size: number }) {
 const [loggedInUser, setLoggedInUser] = useState(null)
@@ -126,30 +127,7 @@ useEffect(() => {
                     {cartItems.map((item, index) =>
                         item.shoe && item.variant && item.shoe.variants[parseInt(item.variant) - 1]?.main_image ? (
                             <div key={index} className="flex items-center justify-between">
-                                <Link href={`/shoe-page/${item.id}-${parseInt(item.variant) - 1}`}>
-                                    <div className="flex">
-                                        <Image
-                                            src={item.shoe.variants[parseInt(item.variant) - 1]?.main_image || "/default-image.png"}
-                                            width={50}
-                                            height={50}
-                                            alt={item.shoe.model}
-                                        />
-                                        <div className="flex flex-col ml-3">
-                                            <span className="text-[15px] font-semibold">
-                                                {item.shoe.manufacturer} {item.shoe.model}
-                                            </span>
-                                            <div className="flex">
-                                                <div className="mr-1 text-[15px] text-gray-600 first-letter:uppercase">
-                                                    {item.shoe.gender}&nbsp;|
-                                                </div>
-                                                <div className="mr-2 text-[15px] text-gray-600 first-letter:uppercase">
-                                                    Size:&nbsp;{item.size}
-                                                </div>
-                                                <span className="text-[15px] font-semibold">${item.shoe.price}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Link>
+                                <SignleShoeItem item={item}/>
                                 <button
                                     className="p-[6px] hover:bg-gray-200 border-solid border-[2px] border-black rounded-[8px]"
                                     onClick={() => handleItemDelete(index)}

@@ -121,3 +121,18 @@ class CartSerializer(serializers.ModelSerializer):
                   'item2', 'item2_variant', 'item2_size', 
                   'item3', 'item3_variant', 'item3_size', 
                   'item4', 'item4_variant', 'item4_size']
+        
+class OrdersSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()  # this will return the username
+    firstName = serializers.CharField(source='user_details.firstName', read_only=True)
+    lastName = serializers.CharField(source='user_details.lastName', read_only=True)
+    address = AddressSerializer()
+    admin_accepted_by = serializers.StringRelatedField()
+
+    class Meta:
+        model = Orders
+        fields = [
+            'id', 'user', 'firstName', 'lastName', 'address', 'item1', 'item1_variant', 'item1_size',
+            'item2', 'item2_variant', 'item2_size', 'item3', 'item3_variant', 'item3_size', 
+            'item4', 'item4_variant', 'item4_size', 'admin_accepted', 'admin_accepted_by', 'shipped'
+        ]

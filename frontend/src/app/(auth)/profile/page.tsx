@@ -59,7 +59,7 @@ export default function page() {
     <div className="w-full flex justify-center">
       <div className="w-[70%] flex flex-col gap-7">
         <div className="w-full flex justify-center items-center mt-10 mb-4 md:mb-0">
-          <Image src={"/img/blackLogoFixedHeight.png"} width={130} height={70} style={{width:130, height:70}} alt="blackLogo" className="ml-8" priority={true}/>
+          <Image src={"/img/blackLogoFixedHeight.png"} width={130} height={60} style={{width:130, height:60}} alt="blackLogo" className="ml-8" priority={true}/>
         </div>
         <div className="flex flex-wrap flex-col sm:flex-row justify-center sm:justify-between items-center">
           <div className="flex flex-col sm:flex-row items-center">

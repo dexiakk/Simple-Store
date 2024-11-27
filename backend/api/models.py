@@ -163,3 +163,26 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - Cart"
+    
+class Orders(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
+    user_details = models.ForeignKey(UserDetails, on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")
+    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")
+    item1 = models.CharField(max_length=100, blank=True, null=True)
+    item1_variant = models.CharField(max_length=100, blank=True, null=True)
+    item1_size = models.CharField(max_length=100, blank=True, null=True)
+    item2 = models.CharField(max_length=100, blank=True, null=True)
+    item2_variant = models.CharField(max_length=100, blank=True, null=True)
+    item2_size = models.CharField(max_length=100, blank=True, null=True)
+    item3 = models.CharField(max_length=100, blank=True, null=True)
+    item3_variant = models.CharField(max_length=100, blank=True, null=True)
+    item3_size = models.CharField(max_length=100, blank=True, null=True)
+    item4 = models.CharField(max_length=100, blank=True, null=True)
+    item4_variant = models.CharField(max_length=100, blank=True, null=True)
+    item4_size = models.CharField(max_length=100, blank=True, null=True)
+    admin_accepted = models.BooleanField(default=False, help_text="Indicates whether the order has been accepted by admin.")
+    admin_accepted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="admin_accepted_orders")
+    shipped = models.BooleanField(default=False, help_text="Indicates whether the order has been shipped.")
+
+    def __str__(self):
+        return f"{self.user.username} - Order"

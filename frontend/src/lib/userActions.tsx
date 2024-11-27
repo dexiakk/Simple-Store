@@ -81,3 +81,14 @@ export const getUserCart = async () => {
         return null
     }
 }
+
+export const getOrdersList = async () => {
+    try {
+        const ordersList = await api.get('/api/orders-list/');
+
+        return ordersList.data
+        
+    } catch (error) {
+        return null
+    }
+}
