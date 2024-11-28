@@ -215,3 +215,27 @@ select {
 img {
   height: auto;
 }
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #9a9a9a rgb(47, 46, 46);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(47, 46, 46);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(47, 46, 46);
+}
+
+::-webkit-scrollbar-track {
+  background-color: #9a9a9a;
+  border-radius: 4px;
+}

@@ -9,7 +9,9 @@ urlpatterns = [
     path("useraddresses/delete/<int:id>/", views.AddressDeleteView.as_view(), name="user-address-delete"),
     path("shoelist/", views.ShoeList.as_view(), name="shoes-list"),
     path('shoe-filters/', views.ShoeFiltersView.as_view(), name='shoe-filters'),
+    path('shoe-sizes-list/', views.ShoeSizesList.as_view(), name="shoe-sizes-list"),
     path('user-cart/', views.CartList.as_view(), name="user-cart"),
     path('user-cart/update/', views.CartPartialUpdate.as_view(), name="user-cart-update"),
     path('orders-list/', views.OrdersList.as_view(), name="orders-list"),
+    path('orders-update/<int:id>/', views.OrdersPartialUpdate.as_view(), name="orders-update"),
 ]

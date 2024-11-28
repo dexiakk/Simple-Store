@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import SignleShoeItem from "../UserDetails/SignleShoeItem";
 import { getShoe } from "@/lib/userActions";
 import AddressArea from "../UserDetails/AddressArea";
+import { Button } from "@/components/ui/button";
+import api from "@/lib/api";
+import { ACCESS_TOKEN } from "@/lib/utils";
 
 interface CartItem {
     id: string | null;
@@ -11,20 +14,21 @@ interface CartItem {
     shoe?: any;
 }
 
-export default function OrdersList({ orders }: any) {
+export default function OrdersList({ orders, admin }: any) {
     return (
-        <div>
+        <div className="flex flex-wrap gap-5">
             {orders.map((order: any) => (
-                <div key={order.id}>
-                    <OrderDetails key={order.id} order={order} />
+                <div key={order.id} className="flex items-stretch">
+                    <OrderDetails key={order.id} order={order} admin={admin} />
                 </div>
             ))}
         </div>
     );
 }
 
-function OrderDetails({ order }: { order: any }) {
+function OrderDetails({ order, admin }: { order: any, admin: any }) {
     const [orderItems, setOrderItems] = useState<CartItem[]>([]);
+    const [totalPrice, setTotalPrice] = useState<number>(0);
 
     useEffect(() => {
         const items = [
@@ -49,13 +53,44 @@ function OrderDetails({ order }: { order: any }) {
         fetchItems();
     }, [order]);
 
+    useEffect(() => {
+        const total = orderItems.reduce((acc, item) => {
+            if (item.shoe && item.shoe.price) {
+                const price = parseFloat(item.shoe.price.toString());
+                return acc + price;
+            }
+            return acc;
+        }, 0);
+        setTotalPrice(total);
+    }, [orderItems]);
+
+    const handleOrderUpdate = async (orderId: number, value: boolean) => {
+        try {
+            const response = await api.patch(`/api/orders-update/${orderId}/`, {
+                admin_accepted: value,
+                admin_accepted_by: value ? admin.user_id : null,
+                shipped: value,
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${ACCESS_TOKEN}`,
+                    },
+                }
+            );
+
+        } catch (error) {
+            return null
+        }
+    }
+
+
     return (
-        <div className="border-2 p-4 mb-4 shadow-sm rounded-[13px]">
-            <span className="font-semibold text-lg mb-2">Order #{order.id}</span>
+        <div className="border-2 p-4 mb-4 shadow-sm rounded-[13px] flex flex-col h-full">
+            <span className={`font-semibold text-lg mb-2 ${order.shipped ? " text-green-600 " : " text-red-600 "}`}>Order #{order.id}</span>
             <div className="flex gap-6">
                 <div>
                     <div className="flex flex-col">
-                        <div className="flex flex-col mb-2">
+                        <div className="flex flex-col mb-4">
                             <span>{order.firstName}&nbsp;{order.lastName}</span>
                             <span>{order.user}</span>
                         </div>
@@ -66,11 +101,31 @@ function OrderDetails({ order }: { order: any }) {
                     {orderItems.map((item, index) => (
                         <SignleShoeItem key={index} item={item} />
                     ))}
+                    <div className="mb-2">
+                        <span className="font-semibold">Total Price: ${totalPrice.toFixed(2)}</span>
+                    </div>
                 </div>
             </div>
-            <div className="flex flex-col text-center mt-3">
-                <span>{order.shipped ? "Shpipped" : "Still in progres.."}</span>
-                <span>{order.admin_accepted ? "Accepted by " : "Not accepted yet."}&nbsp;{order.admin_accepted_by}</span>       
+            <div className="flex flex-col text-center mt-auto">
+
+                {order.shipped && order.admin_accepted ? (
+                    <div>
+                        <span className="text-green-600 font-semibold">Shipped</span>
+                        <div>
+                            <span>Admin accepted by:</span>
+                            <span className="font-bold">&nbsp;{order.admin_accepted_by_username}</span>
+                        </div>
+                        <Button className="mt-2" onClick={() => { handleOrderUpdate(order.id, false) }}>Cancel</Button>
+                    </div>
+                ) : (
+                    <div className="flex flex-col items-center">
+                        <span className="text-red-600 font-semibold">Not shipped</span>
+                        <span>Not accepted yet.</span>
+                        <Button className="mt-2" onClick={() => { handleOrderUpdate(order.id, true) }}>Realize</Button>
+                    </div>
+                )}
+
+
             </div>
         </div>
     );

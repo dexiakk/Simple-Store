@@ -34,10 +34,11 @@ class UserSerializer(serializers.ModelSerializer):
     
 class UserDetailsSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
     
     class Meta:
         model = UserDetails
-        fields = ['permissions','username', 'firstName', 'lastName', 'preferedGender', 'dateOfBirth', 'created_at', 'avatar']
+        fields = ['user_id', 'permissions','username', 'firstName', 'lastName', 'preferedGender', 'dateOfBirth', 'created_at', 'avatar']
         read_only_fields = ['permissions', 'user', 'dateOfBirth', 'created_at']
 
     def get_username(self, obj):
@@ -52,6 +53,11 @@ class ShoeImageGallerySerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoeImageGallery
         fields = ['id', 'image1', 'image2', 'image3', 'image4']
+        
+class ShoeSizesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoeSizes
+        fields = ["size"]
         
 class ShoeVariantSerializer(serializers.ModelSerializer):
     color = serializers.StringRelatedField()
@@ -123,16 +129,24 @@ class CartSerializer(serializers.ModelSerializer):
                   'item4', 'item4_variant', 'item4_size']
         
 class OrdersSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField()  # this will return the username
+    user = serializers.StringRelatedField()
     firstName = serializers.CharField(source='user_details.firstName', read_only=True)
     lastName = serializers.CharField(source='user_details.lastName', read_only=True)
     address = AddressSerializer()
-    admin_accepted_by = serializers.StringRelatedField()
+    admin_accepted_by = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        allow_null=True,
+        required=False
+    )
+    admin_accepted_by_username = serializers.SerializerMethodField()
 
     class Meta:
         model = Orders
         fields = [
             'id', 'user', 'firstName', 'lastName', 'address', 'item1', 'item1_variant', 'item1_size',
             'item2', 'item2_variant', 'item2_size', 'item3', 'item3_variant', 'item3_size', 
-            'item4', 'item4_variant', 'item4_size', 'admin_accepted', 'admin_accepted_by', 'shipped'
+            'item4', 'item4_variant', 'item4_size', 'admin_accepted', 'admin_accepted_by', 'admin_accepted_by_username', 'shipped'
         ]
+        
+    def get_admin_accepted_by_username(self, obj):
+        return obj.admin_accepted_by.username if obj.admin_accepted_by else None

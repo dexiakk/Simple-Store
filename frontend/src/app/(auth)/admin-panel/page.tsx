@@ -30,8 +30,6 @@ export default function page() {
     fetchUser()
   }, [])
 
-  console.log(ordersList)
-
   return (
     <div className='flex flex-col items-center'>
       <div className='w-[60%] flex justify-between'>
@@ -52,9 +50,9 @@ export default function page() {
         </div>
         <EditUserPhoto />
       </div>
-      <div>
+      <div className='my-3'>
         {ordersList && (
-          <OrdersList orders={ordersList} />
+          <OrdersList orders={ordersList} admin={user} />
         )}
       </div>
       <LogoutButton />

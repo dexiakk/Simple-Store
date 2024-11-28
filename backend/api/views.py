@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from django.contrib.auth.models import User
 from .models import *
-from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeFiltersSerializer, CartSerializer, OrdersSerializer
+from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeFiltersSerializer, ShoeSizesSerializer, CartSerializer, OrdersSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.exceptions import PermissionDenied
@@ -159,6 +159,17 @@ class ShoeFiltersView(generics.ListAPIView):
         }
 
         return [filters_data]
+    
+class ShoeSizesList(generics.ListAPIView):
+    serializer_class = ShoeSizesSerializer
+    permission_classes = []
+    
+    def get_queryset(self):
+        return ShoeSizes.objects.all()
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        return Response([size.size for size in queryset])
 
 
 class CartList(generics.ListAPIView):
@@ -188,7 +199,23 @@ class CartPartialUpdate(generics.UpdateAPIView):
 
 class OrdersList(generics.ListAPIView):
     serializer_class = OrdersSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
         return Orders.objects.all()
+    
+class OrdersPartialUpdate(generics.UpdateAPIView):
+    serializer_class = OrdersSerializer
+    permission_classes = []
+    authentication_classes = []
+
+    def get_object(self):
+        order_id = self.kwargs['id']
+        try:
+            orders = Orders.objects.get(id=order_id)
+        except Orders.DoesNotExist:
+            raise Http404("Order doesnt exist")
+
+        return orders
+    
