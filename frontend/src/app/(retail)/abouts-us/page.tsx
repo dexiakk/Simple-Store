@@ -1,4 +1,5 @@
 import AboutUsContent from "@/app/components/About-Us/AboutUsContent";
+import AboutUsMobileContent from "@/app/components/About-Us/AboutUsMobileContent";
 import HelpForm from "@/app/components/About-Us/HelpForm";
 import Image from "next/image";
 
@@ -22,6 +23,7 @@ export default function page() {
       </div>
 
     <AboutUsContent />
+    <AboutUsMobileContent />
 
     <HelpForm />
     </div>
