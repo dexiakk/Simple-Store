@@ -8,6 +8,7 @@ interface AddressProps {
 }
 
 interface UserProps {
+    user_id: number;
     permissions: string | null;
     username: string | null;
     firstName: string | null;
@@ -85,7 +86,7 @@ type Filters = {
   }
 
   type CartItem = {
-    id: string | null
+    id: number | null
     variant: string | null
     size: string | null; 
     shoe?: Shoe | null;

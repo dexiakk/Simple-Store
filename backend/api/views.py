@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from django.contrib.auth.models import User
 from .models import *
-from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeFiltersSerializer, ShoeSizesSerializer, CartSerializer, OrdersSerializer
+from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeFiltersSerializer, ShoeSizesSerializer, CartSerializer, OrdersCreateSerializer, OrdersSerializer, UsersQuestionsSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.exceptions import PermissionDenied
@@ -196,6 +196,13 @@ class CartPartialUpdate(generics.UpdateAPIView):
             raise PermissionDenied("Nie masz dostępu do tego koszyka.")
 
         return cart
+    
+class OrderCreate(generics.CreateAPIView):
+    serializer_class = OrdersCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class OrdersList(generics.ListAPIView):
     serializer_class = OrdersSerializer
@@ -207,8 +214,8 @@ class OrdersList(generics.ListAPIView):
     
 class OrdersPartialUpdate(generics.UpdateAPIView):
     serializer_class = OrdersSerializer
-    permission_classes = []
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
     def get_object(self):
         order_id = self.kwargs['id']
@@ -219,3 +226,30 @@ class OrdersPartialUpdate(generics.UpdateAPIView):
 
         return orders
     
+class UserQuestionCreate(generics.CreateAPIView):
+    queryset = UsersQuestions.objects.all()
+    serializer_class = UsersQuestionsSerializer
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+class UsersQuestionsList(generics.ListAPIView):
+    serializer_class = UsersQuestionsSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    
+    def get_queryset(self):
+        return UsersQuestions.objects.all()
+    
+class QuestionsPartialUpdate(generics.UpdateAPIView):
+    serializer_class = UsersQuestionsSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def get_object(self):
+        question_id = self.kwargs['id']
+        try:
+            orders = UsersQuestions.objects.get(id=question_id)
+        except UsersQuestions.DoesNotExist:
+            raise Http404("Question doesnt exist")
+
+        return orders

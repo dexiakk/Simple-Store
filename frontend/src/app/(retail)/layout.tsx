@@ -2,6 +2,7 @@ import TopBar from "../components/Layout/TopBar";
 import NavBar from "../components/Layout/NavBar";
 import SalesBar from "../components/Layout/salesBar";
 import Footer from "../components/Layout/Footer";
+import MobileFooter from "../components/Layout/MobileFooter";
 
 
 export default function RootLayout({
@@ -26,6 +27,7 @@ export default function RootLayout({
         </div>
       </div>
       <Footer />
+      <MobileFooter />
     </section>
   );
 }

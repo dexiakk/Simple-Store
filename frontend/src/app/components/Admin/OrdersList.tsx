@@ -16,10 +16,12 @@ interface CartItem {
 
 export default function OrdersList({ orders, admin }: any) {
     return (
-        <div className="flex flex-wrap gap-5">
+        <div className="grid grid-cols-3 justify-start gap-5">
             {orders.map((order: any) => (
-                <div key={order.id} className="flex items-stretch">
-                    <OrderDetails key={order.id} order={order} admin={admin} />
+                <div key={order.id} className="flex items-stretch justify-center">
+                    <div className="w-full max-w-[505px]">
+                        <OrderDetails key={order.id} order={order} admin={admin} />
+                    </div>
                 </div>
             ))}
         </div>
@@ -29,6 +31,10 @@ export default function OrdersList({ orders, admin }: any) {
 function OrderDetails({ order, admin }: { order: any, admin: any }) {
     const [orderItems, setOrderItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
+
+    const createdAt = order.created_at
+    const date = createdAt ? new Date(createdAt) : null;
+    const formattedDate = date && date.toLocaleDateString('en-CA')
 
     useEffect(() => {
         const items = [
@@ -78,6 +84,8 @@ function OrderDetails({ order, admin }: { order: any, admin: any }) {
                 }
             );
 
+            window.location.reload()
+
         } catch (error) {
             return null
         }
@@ -93,6 +101,7 @@ function OrderDetails({ order, admin }: { order: any, admin: any }) {
                         <div className="flex flex-col mb-4">
                             <span>{order.firstName}&nbsp;{order.lastName}</span>
                             <span>{order.user}</span>
+                            <span className="font-semibold">{formattedDate}</span>
                         </div>
                         <AddressArea addresses={order.address} selectedAddressId={order.selectedAddressId} onSelectAddress={(id) => console.log(id)} />
                     </div>

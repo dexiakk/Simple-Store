@@ -12,6 +12,10 @@ urlpatterns = [
     path('shoe-sizes-list/', views.ShoeSizesList.as_view(), name="shoe-sizes-list"),
     path('user-cart/', views.CartList.as_view(), name="user-cart"),
     path('user-cart/update/', views.CartPartialUpdate.as_view(), name="user-cart-update"),
+    path('order-create/', views.OrderCreate.as_view(), name="create-order"),
     path('orders-list/', views.OrdersList.as_view(), name="orders-list"),
     path('orders-update/<int:id>/', views.OrdersPartialUpdate.as_view(), name="orders-update"),
+    path('questions-create/', views.UserQuestionCreate.as_view(), name="create-user-question"),
+    path('questions-list/', views.UsersQuestionsList.as_view(), name="users-questions-list"),
+    path('questions-update/<int:id>/', views.QuestionsPartialUpdate.as_view(), name="questions-update"),
 ]

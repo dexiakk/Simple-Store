@@ -92,3 +92,13 @@ export const getOrdersList = async () => {
         return null
     }
 }
+
+export const getQuestionsList = async () => {
+    try {
+        const questionsList = await api.get('/api/questions-list/');
+
+        return questionsList.data
+    } catch (error) {
+        return null
+    }
+}

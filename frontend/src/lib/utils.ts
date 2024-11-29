@@ -41,3 +41,25 @@ export const authFormSchema = (type: string) => z.object({
           return age > 16 || (age === 16 && m >= 0);
       }, { message: "You must be at least 16 years old" }),
 });
+
+export const helpFormSchema = z.object({
+    email: z.string()
+      .email("Please enter a valid email.")
+      .max(50, { message: "Email must be at most 50 characters long." }),
+  
+    firstName: z.string()
+      .min(1, { message: "First name is required." })
+      .max(50, { message: "First name must be at most 50 characters long." }),
+  
+    lastName: z.string()
+      .min(1, { message: "Last name is required." })
+      .max(50, { message: "Last name must be at most 50 characters long." }),
+  
+    subject: z.string()
+      .min(1, { message: "Subject is required." })
+      .max(100, { message: "Subject must be at most 100 characters long." }),
+  
+    description: z.string()
+      .min(1, { message: "Description is required." })
+      .max(350, { message: "Description must be at most 350 characters long." }),
+  });

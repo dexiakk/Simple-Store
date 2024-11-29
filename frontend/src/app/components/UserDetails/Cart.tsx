@@ -10,17 +10,18 @@ import { useEffect, useState } from "react"
 import api from "@/lib/api"
 import { ACCESS_TOKEN } from "@/lib/utils"
 import SignleShoeItem from "./SignleShoeItem"
+import { Button } from "@/components/ui/button"
 
 export default function Cart({ color, size }: { color: String, size: number }) {
-const [loggedInUser, setLoggedInUser] = useState(null)
-useEffect(() => {
-  const fetchUser = async () => {
-    const user = await getLoggedInUser()
+    const [loggedInUser, setLoggedInUser] = useState(null)
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await getLoggedInUser()
 
-    setLoggedInUser(user)
-  }
-  fetchUser()
-}, [])
+            setLoggedInUser(user)
+        }
+        fetchUser()
+    }, [])
 
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
@@ -36,7 +37,7 @@ useEffect(() => {
 
             const items = [
                 { id: cart.item1, variant: cart.item1_variant, size: cart.item1_size },
-                { id: cart.item2, variant: cart.item2_variant, size: cart.item2_size},
+                { id: cart.item2, variant: cart.item2_variant, size: cart.item2_size },
                 { id: cart.item3, variant: cart.item3_variant, size: cart.item3_size },
                 { id: cart.item4, variant: cart.item4_variant, size: cart.item4_size },
             ];
@@ -68,7 +69,7 @@ useEffect(() => {
             const updatedCart = { ...cart };
             updatedCart[`item${index + 1}`] = null;
             updatedCart[`item${index + 1}_variant`] = null;
-            updatedCart[`item${index +1}_size`] = null;
+            updatedCart[`item${index + 1}_size`] = null;
 
             await api.patch("/api/user-cart/update/", updatedCart, {
                 headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
@@ -93,8 +94,8 @@ useEffect(() => {
         setTotalPrice(total);
     }, [cartItems]);
 
-    if(!loggedInUser){
-        return(
+    if (!loggedInUser) {
+        return (
             <Popover>
                 <PopoverTrigger>
                     {color === "black" ? (
@@ -127,7 +128,7 @@ useEffect(() => {
                     {cartItems.map((item, index) =>
                         item.shoe && item.variant && item.shoe.variants[parseInt(item.variant) - 1]?.main_image ? (
                             <div key={index} className="flex items-center justify-between">
-                                <SignleShoeItem item={item}/>
+                                <SignleShoeItem item={item} />
                                 <button
                                     className="p-[6px] hover:bg-gray-200 border-solid border-[2px] border-black rounded-[8px]"
                                     onClick={() => handleItemDelete(index)}
@@ -141,6 +142,12 @@ useEffect(() => {
                         <span className="font-semibold">Total Price:</span>
                         <div className="ml-2 font-bold">${totalPrice.toFixed(2)}</div>
                     </div>
+                </div>
+
+                <div className="w-full flex justify-end">
+                    <Link href={"/checkout/"}>
+                        <Button>Checkout Now</Button>
+                    </Link>
                 </div>
             </PopoverContent>
         </Popover>

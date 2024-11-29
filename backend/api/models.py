@@ -164,6 +164,9 @@ class Cart(models.Model):
     def __str__(self):
         return f"{self.user.username} - Cart"
     
+    class Meta:
+        verbose_name_plural = "Carts"
+    
 class Orders(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     user_details = models.ForeignKey(UserDetails, on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")
@@ -183,6 +186,26 @@ class Orders(models.Model):
     admin_accepted = models.BooleanField(default=False, help_text="Indicates whether the order has been accepted by admin.")
     admin_accepted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="admin_accepted_orders")
     shipped = models.BooleanField(default=False, help_text="Indicates whether the order has been shipped.")
+    created_at = models.DateTimeField(auto_now_add=True, help_text="The date and time when the order was created.")
 
     def __str__(self):
         return f"{self.user.username} - Order"
+    
+    class Meta:
+        verbose_name_plural = "Orders"
+    
+class UsersQuestions(models.Model):
+    user_email = models.CharField(max_length=50)
+    user_firstName = models.CharField(max_length=50)
+    user_lastName = models.CharField(max_length=50)
+    subject = models.CharField(max_length=100)
+    description = models.CharField(max_length=350)
+    admin_solved = models.BooleanField(default=False, help_text="Indicates whether the question has been solved by admin.")
+    admin_solved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="admin_solved_question")
+    
+    def __str__(self):
+        return f"{self.user_email} - Question"
+    
+    class Meta:
+        verbose_name_plural = "User Questions"
+    

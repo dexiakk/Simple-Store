@@ -145,8 +145,56 @@ class OrdersSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'user', 'firstName', 'lastName', 'address', 'item1', 'item1_variant', 'item1_size',
             'item2', 'item2_variant', 'item2_size', 'item3', 'item3_variant', 'item3_size', 
-            'item4', 'item4_variant', 'item4_size', 'admin_accepted', 'admin_accepted_by', 'admin_accepted_by_username', 'shipped'
+            'item4', 'item4_variant', 'item4_size', 'admin_accepted', 'admin_accepted_by', 'admin_accepted_by_username', 'shipped', 'created_at',
         ]
         
     def get_admin_accepted_by_username(self, obj):
         return obj.admin_accepted_by.username if obj.admin_accepted_by else None
+    
+class OrdersCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Orders
+        fields = [
+            'user',
+            'user_details',
+            'address',
+            'item1',
+            'item1_variant',
+            'item1_size',
+            'item2',
+            'item2_variant',
+            'item2_size',
+            'item3',
+            'item3_variant',
+            'item3_size',
+            'item4',
+            'item4_variant',
+            'item4_size',
+            'admin_accepted',
+            'admin_accepted_by',
+            'shipped',
+        ]
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        
+        validated_data['user'] = user
+        
+        validated_data['user_details'] = UserDetails.objects.get(user=user)
+        
+        return super().create(validated_data)
+    
+class UsersQuestionsSerializer(serializers.ModelSerializer):
+    admin_solved_by = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        allow_null=True,
+        required=False
+    )
+    admin_solved_by_username = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = UsersQuestions
+        fields = ['id', 'user_email', 'user_firstName', 'user_lastName', 'subject', 'description', 'admin_solved', 'admin_solved_by', 'admin_solved_by_username']
+    
+    def get_admin_solved_by_username(self, obj):
+        return obj.admin_solved_by.username if obj.admin_solved_by else None

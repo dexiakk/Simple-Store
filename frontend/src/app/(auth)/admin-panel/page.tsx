@@ -2,13 +2,16 @@
 import OrdersList from '@/app/components/Admin/OrdersList'
 import EditUserPhoto from '@/app/components/UserDetails/EditUserPhoto'
 import LogoutButton from '@/app/components/UserDetails/LogoutButton'
-import { getLoggedInUser, getOrdersList } from '@/lib/userActions'
+import { getLoggedInUser, getOrdersList, getQuestionsList } from '@/lib/userActions'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import QuestionsList from '@/app/components/Admin/QuestionsList'
 
 export default function page() {
   const [user, setUser] = useState<UserProps | null>()
   const [ordersList, setOrdersList] = useState()
+  const [questionsList, setQuestionsList] = useState()
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -21,14 +24,26 @@ export default function page() {
   }, [])
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchOrders = async () => {
       const orders = await getOrdersList()
 
       setOrdersList(orders)
     }
 
-    fetchUser()
+    fetchOrders()
   }, [])
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const questions = await getQuestionsList()
+
+      setQuestionsList(questions)
+    }
+
+    fetchQuestions()
+  }, [])
+
+  console.log(questionsList)
 
   return (
     <div className='flex flex-col items-center'>
@@ -51,9 +66,28 @@ export default function page() {
         <EditUserPhoto />
       </div>
       <div className='my-3'>
-        {ordersList && (
-          <OrdersList orders={ordersList} admin={user} />
-        )}
+
+        <Tabs defaultValue="users-orders" className='w-full'>
+          <TabsList className='w-full justify-center bg-white'>
+            <div className='pb-7 flex gap-3'>
+              <TabsTrigger value="users-orders" className='text-[20px] border-2'>Users Orders</TabsTrigger>
+              <TabsTrigger value="users-questions" className='text-[20px] border-2'>Users Questions</TabsTrigger>
+            </div>
+          </TabsList>
+          <TabsContent value="users-orders" className='w-full'>
+            {ordersList && (
+              <OrdersList orders={ordersList} admin={user} />
+            )}
+          </TabsContent>
+          <TabsContent value="users-questions">
+            {questionsList && (
+              <QuestionsList questionsList={questionsList} admin={user}/>
+            )}
+          </TabsContent>
+        </Tabs>
+
+
+
       </div>
       <LogoutButton />
     </div>
