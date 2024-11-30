@@ -73,11 +73,11 @@ export default function QuestionsList({ questionsList, admin }: QuestionsListPro
                             <TableCell className="border-2">{question.subject}</TableCell>
                             <TableCell className="max-w-[350px] border-2">{question.description}</TableCell>
                             <TableCell className="border-2">{question.admin_solved ? (
-                                <Button onClick={() => {handleQuestionSolve(question.id, false)}}>
+                                <Button onClick={() => { handleQuestionSolve(question.id, false) }}>
                                     Cancel
                                 </Button>
                             ) : (
-                                <Button className="px-5" onClick={() => {handleQuestionSolve(question.id, true)}}>
+                                <Button className="px-5" onClick={() => { handleQuestionSolve(question.id, true) }}>
                                     Solve
                                 </Button>
                             )}</TableCell>

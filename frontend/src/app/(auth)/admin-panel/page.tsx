@@ -47,7 +47,7 @@ export default function page() {
 
   return (
     <div className='flex flex-col items-center'>
-      <div className='w-[60%] flex justify-between'>
+      <div className='w-[90%] sm:w-[70%] md:w-[60%] flex justify-between'>
         <div className='flex items-center'>
           <div className="relative w-[120px] h-[120px] rounded-full overflow-hidden">
             {user?.avatar ? (
@@ -63,11 +63,13 @@ export default function page() {
             <span className='font-bold'>{user?.username}</span>
           </div>
         </div>
-        <EditUserPhoto />
+        <div className='hidden sm:flex'>
+          <EditUserPhoto />
+        </div>
       </div>
       <div className='my-3'>
 
-        <Tabs defaultValue="users-orders" className='w-full'>
+        <Tabs defaultValue="users-orders" className='w-full mt-4'>
           <TabsList className='w-full justify-center bg-white'>
             <div className='pb-7 flex gap-3'>
               <TabsTrigger value="users-orders" className='text-[20px] border-2'>Users Orders</TabsTrigger>
@@ -81,7 +83,7 @@ export default function page() {
           </TabsContent>
           <TabsContent value="users-questions">
             {questionsList && (
-              <QuestionsList questionsList={questionsList} admin={user}/>
+              <QuestionsList questionsList={questionsList} admin={user} />
             )}
           </TabsContent>
         </Tabs>

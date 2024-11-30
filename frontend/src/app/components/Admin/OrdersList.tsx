@@ -16,7 +16,7 @@ interface CartItem {
 
 export default function OrdersList({ orders, admin }: any) {
     return (
-        <div className="grid grid-cols-3 justify-start gap-5">
+        <div className="grid lg:grid-cols-2 2xl:grid-cols-3 justify-start gap-5">
             {orders.map((order: any) => (
                 <div key={order.id} className="flex items-stretch justify-center">
                     <div className="w-full max-w-[505px]">
@@ -101,7 +101,7 @@ function OrderDetails({ order, admin }: { order: any, admin: any }) {
     return (
         <div className="border-2 p-4 mb-4 shadow-sm rounded-[13px] flex flex-col h-full">
             <span className={`font-semibold text-lg mb-2 ${order.shipped ? " text-green-600 " : " text-red-600 "}`}>Order #{order.id}</span>
-            <div className="flex gap-6">
+            <div className="flex flex-col sm:flex-row gap-6">
                 <div>
                     <div className="flex flex-col">
                         <div className="flex flex-col mb-4">
