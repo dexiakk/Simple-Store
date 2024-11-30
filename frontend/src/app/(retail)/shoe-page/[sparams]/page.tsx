@@ -81,42 +81,42 @@ export default function Page({ params }: any) {
 
   const handleAddToCart = async (id: string, variant: string) => {
     try {
-        if (!currentSize) {
-          if (sizeErrorVisibility === "hidden") {
-            setSizeErrorVisibility("block");
-          }
-          return;
+      if (!currentSize) {
+        if (sizeErrorVisibility === "hidden") {
+          setSizeErrorVisibility("block");
         }
+        return;
+      }
 
-        const cart = await getUserCart();
-        const updatedCart = { ...cart };
+      const cart = await getUserCart();
+      const updatedCart = { ...cart };
 
-        let isCartFull = true;
+      let isCartFull = true;
 
-        for (let i = 1; i < 5; i++) {
-            if (updatedCart[`item${i}`] === null) {
-                updatedCart[`item${i}`] = id;
-                updatedCart[`item${i}_variant`] = parseInt(variant)+1;
-                updatedCart[`item${i}_size`] = currentSize;
-                isCartFull = false;
-                break;
-            }
+      for (let i = 1; i < 5; i++) {
+        if (updatedCart[`item${i}`] === null) {
+          updatedCart[`item${i}`] = id;
+          updatedCart[`item${i}_variant`] = parseInt(variant) + 1;
+          updatedCart[`item${i}_size`] = currentSize;
+          isCartFull = false;
+          break;
         }
+      }
 
-        console.log(updatedCart)
+      console.log(updatedCart)
 
-        if (isCartFull) {
-            alert("Your Cart is full.");
-        } else {
-            await api.patch("/api/user-cart/update/", updatedCart, {
-                headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
-            });
-            window.location.reload();
-        }
+      if (isCartFull) {
+        alert("Your Cart is full.");
+      } else {
+        await api.patch("/api/user-cart/update/", updatedCart, {
+          headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
+        });
+        window.location.reload();
+      }
     } catch (error) {
-        console.error("Błąd przy dodawaniu przedmiotu do koszyka:", error);
+      console.error("Błąd przy dodawaniu przedmiotu do koszyka:", error);
     }
-};
+  };
   return (
     <div className='w-full flex justify-center mt-6'>
       <div className='w-[90%] flex flex-wrap justify-center gap-3 items-start'>
@@ -146,7 +146,11 @@ export default function Page({ params }: any) {
           <span className='text-[20px]'>{shoe.manufacturer}&nbsp;{shoe.model}</span>
           <span className='first-letter:uppercase text-gray-600'>{shoe.gender}</span>
 
-          <span className='text-[18px] text-gray-600'>${shoe.price}</span>
+          {shoe.on_sale && (
+            <span className='text-orange-500 font-semibold text-[22px]'>${shoe.sale_price}</span>
+          )}
+
+          <span className={`${shoe.on_sale ? "line-through" : ""} text-[18px] text-gray-600`}>${shoe.price}</span>
 
           <div className="flex flex-wrap gap-3 mt-3">
             {shoe.variants.map((variant: any, index: number) => (
@@ -167,11 +171,11 @@ export default function Page({ params }: any) {
 
           <span className='w-full pr-7 my-3 font-light'>{shoe.description}</span>
 
-          <Sizes shoe_sizes={shoe.shoe_sizes} handleSizeSelect={handleSizeSelect}/>
+          <Sizes shoe_sizes={shoe.shoe_sizes} handleSizeSelect={handleSizeSelect} />
           <span className={`text-red-500 font-light ${sizeErrorVisibility}`}>Please choose your size.</span>
 
           <div className='mt-3 flex flex-col items-center xl:items-start gap-2'>
-            <Button onClick={() => {handleAddToCart(id, currentVariant)}} className='w-full max-w-[400px] xl:max-w-[330px] py-5 xl:py-3 rounded-[18px]'>Dodaj do koszyka</Button>
+            <Button onClick={() => { handleAddToCart(id, currentVariant) }} className='w-full max-w-[400px] xl:max-w-[330px] py-5 xl:py-3 rounded-[18px]'>Dodaj do koszyka</Button>
             <Button className='w-full max-w-[400px] xl:max-w-[330px] bg-white text-black rounded-[18px] border-solid border-[1px] border-gray-400 hover:bg-gray-100'>Ulubione ♥</Button>
           </div>
         </div>

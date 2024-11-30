@@ -44,22 +44,45 @@ type Color = {
     value: string;
 };
 
-interface ShoeItemProps {
+type ShoeItemProps = {
     id: number;
-    bestseller: boolean;
     manufacturer: string;
     model: string;
-    gender: "male" | "female" | "unisex";
-    colors: Color[];
-    description: string;
     price: string;
+    sale_price?: string;
+    bestseller: boolean;
+    gender: string;
     shoe_high: string;
-    variants: ShoeVariant[];
-}
+    variants: {
+        main_image: string;
+        images_gallery: { [key: string]: string }[];
+    }[];
+    colors: { value: string }[];
+    on_sale: boolean;
+};
 
 interface ItemWindowProps {
     shoeList: ShoeItemProps[];
 }
+
+type SaleItemWindowProps = {
+    shoeList: {
+        id: number;
+        manufacturer: string;
+        model: string;
+        price: string;
+        sale_price?: string;
+        bestseller: boolean;
+        gender: string;
+        shoe_high: string;
+        variants: {
+            main_image: string;
+            images_gallery: Array<{ [key: string]: string }>;
+        }[];
+        colors: { value: string }[];
+        on_sale: boolean;
+    }[];
+};
 
 type Filters = {
     category: string[];
@@ -67,28 +90,28 @@ type Filters = {
     color: string[];
     gender: string[];
     shoe_high: string[];
-  };
-  
-  interface FiltersToSentProps {
+};
+
+interface FiltersToSentProps {
     filters: Filters;
-  }
+}
 
-  interface FiltersSideBarProps {
-    availableFilters: Filters; 
-    filters: Filters;  
+interface FiltersSideBarProps {
+    availableFilters: Filters;
+    filters: Filters;
     onFilterChange: (key: keyof Filters, value: string, checked: boolean) => void
-  }
+}
 
-  interface ShoePageGalleryProps {
+interface ShoePageGalleryProps {
     shoe: ShoeItemProps;
     currentVariant: number;
     handleCurrentImageChange: (source: string) => void;
-  }
+}
 
-  type CartItem = {
+type CartItem = {
     id: number | null
     variant: string | null
-    size: string | null; 
+    size: string | null;
     shoe?: Shoe | null;
 }
 

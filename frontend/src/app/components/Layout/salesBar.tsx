@@ -38,7 +38,7 @@ export default function SalesBar() {
     }, [salesBarKey]);
 
     return (
-        <div className="w-full flex justify-center items-center bg-[#F7F7F7] gap-10 py-3 text-black">
+        <div className="hidden w-full md:flex justify-center items-center bg-[#F7F7F7] gap-10 py-3 text-black">
             <span onClick={changingSalesTexts} className="text-[24px] font-semibold hover:opacity-50 cursor-pointer">&lt;</span>
             <div>
                 <span className="font-bold">{salesBarText}</span>

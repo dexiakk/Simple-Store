@@ -61,9 +61,15 @@ function OrderDetails({ order, admin }: { order: any, admin: any }) {
 
     useEffect(() => {
         const total = orderItems.reduce((acc, item) => {
-            if (item.shoe && item.shoe.price) {
-                const price = parseFloat(item.shoe.price.toString());
-                return acc + price;
+            if (item.shoe) {
+                if (item.shoe.sale_price) {
+                    const price = parseFloat(item.shoe.sale_price.toString());
+                    return acc + price;
+                }
+                else if (item.shoe.price) {
+                    const price = parseFloat(item.shoe.price.toString());
+                    return acc + price;
+                }
             }
             return acc;
         }, 0);

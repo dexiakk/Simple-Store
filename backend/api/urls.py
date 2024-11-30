@@ -8,6 +8,7 @@ urlpatterns = [
     path("useraddress/update/<int:id>/", views.AddressPartialUpdateView.as_view(), name="user-address-update"),
     path("useraddresses/delete/<int:id>/", views.AddressDeleteView.as_view(), name="user-address-delete"),
     path("shoelist/", views.ShoeList.as_view(), name="shoes-list"),
+    path("shoe-on-sale-list/", views.ShoeListOnSaleView.as_view(), name="shoe-on-sale-list"),
     path('shoe-filters/', views.ShoeFiltersView.as_view(), name='shoe-filters'),
     path('shoe-sizes-list/', views.ShoeSizesList.as_view(), name="shoe-sizes-list"),
     path('user-cart/', views.CartList.as_view(), name="user-cart"),

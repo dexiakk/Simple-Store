@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from django.contrib.auth.models import User
 from .models import *
-from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeFiltersSerializer, ShoeSizesSerializer, CartSerializer, OrdersCreateSerializer, OrdersSerializer, UsersQuestionsSerializer
+from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeOnSaleSerializer, ShoeFiltersSerializer, ShoeSizesSerializer, CartSerializer, OrdersCreateSerializer, OrdersSerializer, UsersQuestionsSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.exceptions import PermissionDenied
@@ -135,6 +135,15 @@ class ShoeList(generics.ListAPIView):
 
         return queryset.distinct()
 
+class ShoeListOnSaleView(generics.ListAPIView):
+    serializer_class = ShoeOnSaleSerializer
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def get_queryset(self):
+        queryset = Shoe.objects.filter(on_sale=True)
+
+        return queryset.distinct()
 
 class ShoeFiltersView(generics.ListAPIView):
     serializer_class = ShoeFiltersSerializer

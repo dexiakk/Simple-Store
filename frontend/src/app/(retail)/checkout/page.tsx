@@ -33,6 +33,7 @@ export default function page() {
 
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
+    const [orderPlaced, setOrderPlaced] = useState(false);
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -93,9 +94,15 @@ export default function page() {
 
     useEffect(() => {
         const total = cartItems.reduce((acc, item) => {
-            if (item.shoe && item.shoe.price) {
-                const price = parseFloat(item.shoe.price.toString());
-                return acc + price;
+            if (item.shoe) {
+                if (item.shoe.sale_price) {
+                    const price = parseFloat(item.shoe.sale_price.toString());
+                    return acc + price;
+                }
+                else if (item.shoe.price) {
+                    const price = parseFloat(item.shoe.price.toString());
+                    return acc + price;
+                }
             }
             return acc;
         }, 0);
@@ -159,6 +166,7 @@ export default function page() {
 
             if (response.status === 201) {
                 setCartItems([]);
+                setOrderPlaced(true);
                 await api.patch("/api/user-cart/update/", {
                     item1: null,
                     item1_variant: null,
@@ -176,8 +184,6 @@ export default function page() {
                     headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
                 });
 
-                alert("Order successfully placed!");
-                window.location.reload();
             } else {
                 alert("Failed to create order. Please try again.");
             }
@@ -190,6 +196,15 @@ export default function page() {
 
     return (
         <div className="flex flex-col items-center">
+             {orderPlaced ? (
+            <div className="text-center mt-24 h-[250px]">
+                <h1 className="text-3xl font-bold text-green-600">
+                    You have successfully placed your order!
+                </h1>
+                <p className="text-lg mt-4">Thank you for shopping with us. Your order is being processed.</p>
+            </div>
+        ) : (
+            <>
             <span className="text-4xl mt-5">Checkout</span>
             <hr className="w-[90%] sm:w-full max-w-[550px] h-[2px] bg-gray-400 mt-6 mb-4rounded-[4px]" />
             <div className="w-full max-w-[400px] lg:max-w-[450px] flex flex-col mt-8">
@@ -226,6 +241,8 @@ export default function page() {
             >
                 Place Order
             </Button>
+            </>
+        )}
         </div>
     );
 }

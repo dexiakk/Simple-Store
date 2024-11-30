@@ -30,7 +30,7 @@ export default function SignleShoeItem({ item }: { item: any }) {
                         <div className="mr-2 text-[15px] text-gray-600 first-letter:uppercase">
                             Size:&nbsp;{item.size}
                         </div>
-                        <span className="text-[15px] font-semibold">${item.shoe?.price || 'N/A'}</span>
+                        <span className={`${item.shoe?.sale_price ? "text-orange-500" : ""} text-[15px] font-semibold`}>${item.shoe?.sale_price ? item.shoe?.sale_price : item.shoe?.price || 'N/A'}</span>
                     </div>
                 </div>
             </div>

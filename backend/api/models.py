@@ -113,6 +113,8 @@ class Shoe(models.Model):
     bestseller = models.BooleanField(blank=True)
     gender = models.CharField(max_length=50, choices=GENDER_CHOICES)
     shoe_high = models.CharField(max_length=50, choices=SHOE_HIGH_CHOICES)
+    on_sale = models.BooleanField(blank=True, default=False)
+    sale_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
         return f"Shoe model: {self.model} - {self.gender}"

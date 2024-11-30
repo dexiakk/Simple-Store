@@ -90,7 +90,31 @@ class ShoeSerializer(serializers.ModelSerializer):
         model = Shoe
         fields = [
             'id', 'manufacturer', 'model', 'price', 'description', 'shoe_sizes',
-            'bestseller', 'gender', 'shoe_high', 'variants', 'colors', 'shoe_gallery', 'category', 'collection', 
+            'bestseller', 'gender', 'shoe_high', 'on_sale', 'sale_price', 'variants', 'colors', 'shoe_gallery', 'category', 'collection', 
+        ]
+        
+    def get_colors(self, obj):
+        return [
+            {
+                "name": variant.color.name,
+                "value": variant.color.color,
+            }
+            for variant in obj.variants.all()
+        ]
+        
+class ShoeOnSaleSerializer(serializers.ModelSerializer):
+    manufacturer = serializers.StringRelatedField()
+    colors = serializers.SerializerMethodField()
+    shoe_high = serializers.CharField(source='get_shoe_high_display')
+    shoe_sizes = serializers.PrimaryKeyRelatedField(queryset=ShoeSizes.objects.all(), many=True)
+    variants = ShoeVariantSerializer(many=True, read_only=True)
+    shoe_gallery = serializers.PrimaryKeyRelatedField(queryset=ShoeImageGallery.objects.all(), many=True, required=False)
+
+    class Meta:
+        model = Shoe
+        fields = [
+            'id', 'manufacturer', 'model', 'price', 'description', 'bestseller',
+            'gender', 'shoe_high', 'shoe_sizes', 'variants', 'colors', 'shoe_gallery', 'category', 'collection', 'on_sale', 'sale_price'
         ]
         
     def get_colors(self, obj):

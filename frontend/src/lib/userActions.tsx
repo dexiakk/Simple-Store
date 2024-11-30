@@ -52,6 +52,17 @@ export const getShoeList = async (filters:FiltersToSentProps) => {
     }
 }
 
+export const getShoeOnSaleList = async () => {
+    try {
+        const response = await api.get("/api/shoe-on-sale-list/")
+
+        return response.data
+        
+    } catch (error) {
+        return null
+    }
+}
+
 export const getAvailableFilters = async () => {
     try {
         const response = await api.get("/api/shoe-filters/");
