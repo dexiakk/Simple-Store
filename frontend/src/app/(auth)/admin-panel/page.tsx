@@ -83,7 +83,9 @@ export default function page() {
           </TabsContent>
           <TabsContent value="users-questions">
             {questionsList && (
-              <QuestionsList questionsList={questionsList} admin={user} />
+              <div className="max-w-[100vw]">
+                <QuestionsList questionsList={questionsList} admin={user} />
+              </div>
             )}
           </TabsContent>
         </Tabs>

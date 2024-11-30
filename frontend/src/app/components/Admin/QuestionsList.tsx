@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
     Table,
     TableBody,
@@ -50,48 +51,53 @@ export default function QuestionsList({ questionsList, admin }: QuestionsListPro
     }
 
     return (
-        <Table>
-            <TableHeader>
-                <TableRow className="border-2">
-                    <TableHead>Questions id</TableHead>
-                    <TableHead>User Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Subject</TableHead>
-                    <TableHead className="max-w-[350px]">Description</TableHead>
-                    <TableHead>Solve</TableHead>
-                    <TableHead>Admin Solved By</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {questionsList?.length ? (
-                    questionsList.map((question: any) => (
-                        <TableRow key={question.id} className={`h-[50px] border-2 ${question.admin_solved ? "bg-green-200 hover:bg-green-400" : "bg-red-200 hover:bg-red-400"
-                            }`} >
-                            <TableCell className="border-2">{question.id}</TableCell>
-                            <TableCell className="border-2">{question.user_firstName}&nbsp;{question.user_lastName}</TableCell>
-                            <TableCell className="border-2">{question.user_email}</TableCell>
-                            <TableCell className="border-2">{question.subject}</TableCell>
-                            <TableCell className="max-w-[350px] border-2">{question.description}</TableCell>
-                            <TableCell className="border-2">{question.admin_solved ? (
-                                <Button onClick={() => { handleQuestionSolve(question.id, false) }}>
-                                    Cancel
-                                </Button>
-                            ) : (
-                                <Button className="px-5" onClick={() => { handleQuestionSolve(question.id, true) }}>
-                                    Solve
-                                </Button>
-                            )}</TableCell>
-                            <TableCell className="border-2">{question.admin_solved_by_username}</TableCell>
-                        </TableRow>
-                    ))
-                ) : (
-                    <TableRow>
-                        <TableCell colSpan={6} className="text-center">
-                            No questions found.
-                        </TableCell>
+        <ScrollArea className="whitespace-nowrap rounded-md border overflow-auto">
+            <ScrollBar orientation="horizontal" className="absolute top-0 bg-[#2F2E2E] z-10"/>
+            <ScrollBar orientation="horizontal" className="absolute bg-[#2F2E2E] z-10"/>
+            <Table>
+                <TableHeader>
+                    <TableRow className="border-2 h-[50px]">
+                        <TableHead>Questions id</TableHead>
+                        <TableHead>User Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Subject</TableHead>
+                        <TableHead className="max-w-[350px]">Description</TableHead>
+                        <TableHead>Solve</TableHead>
+                        <TableHead>Admin Solved By</TableHead>
                     </TableRow>
-                )}
-            </TableBody>
-        </Table>
+                </TableHeader>
+                <TableBody>
+                    {questionsList?.length ? (
+                        questionsList.map((question: any) => (
+                            <TableRow key={question.id} className={`h-[50px] border-2 ${question.admin_solved ? "bg-green-200 hover:bg-green-400" : "bg-red-200 hover:bg-red-400"
+                                }`} >
+                                <TableCell className="border-2">{question.id}</TableCell>
+                                <TableCell className="border-2">{question.user_firstName}&nbsp;{question.user_lastName}</TableCell>
+                                <TableCell className="border-2">{question.user_email}</TableCell>
+                                <TableCell className="border-2">{question.subject}</TableCell>
+                                <TableCell className="max-w-[350px] border-2 text-wrap">{question.description}</TableCell>
+                                <TableCell className="border-2">{question.admin_solved ? (
+                                    <Button onClick={() => { handleQuestionSolve(question.id, false) }}>
+                                        Cancel
+                                    </Button>
+                                ) : (
+                                    <Button className="px-5" onClick={() => { handleQuestionSolve(question.id, true) }}>
+                                        Solve
+                                    </Button>
+                                )}</TableCell>
+                                <TableCell className="border-2">{question.admin_solved_by_username}</TableCell>
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={6} className="text-center">
+                                No questions found.
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+            
+        </ScrollArea>
     )
 }
