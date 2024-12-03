@@ -63,3 +63,39 @@ export const helpFormSchema = z.object({
       .min(1, { message: "Description is required." })
       .max(350, { message: "Description must be at most 350 characters long." }),
   });
+
+  export const shoeFormSchema = z.object({
+    manufacturer: z.number({
+      required_error: "Manufacturer is required",
+      invalid_type_error: "Manufacturer must be a number",
+    }),
+    category: z.number({
+      required_error: "Category is required",
+      invalid_type_error: "Category must be a number",
+    }),
+    collection: z.number({
+      required_error: "Collection is required",
+      invalid_type_error: "Collection must be a number",
+    }),
+    model: z.string()
+      .min(1, { message: "Model is required" })
+      .max(50, { message: "Model name cannot exceed 50 characters" }),
+    price: z.any(),
+    description: z.string()
+      .min(1, { message: "Description is required" })
+      .max(500, { message: "Description cannot exceed 500 characters" }),
+    bestseller: z.boolean().optional(),
+    gender: z.enum(["male", "female", "unisex"], {
+      required_error: "Gender is required",
+      invalid_type_error: "Gender must be male, female, or unisex",
+    }),
+    shoe_high: z.enum(["low", "mid", "high"], {
+      required_error: "Shoe height is required",
+      invalid_type_error: "Shoe height must be low, mid, or high",
+    }),
+    on_sale: z.boolean().optional(),
+    sale_price: z.any(),
+    shoe_sizes: z.array(z.number()).nonempty({
+      message: "At least one shoe size is required",
+    }),
+  });

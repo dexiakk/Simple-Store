@@ -22,8 +22,6 @@ export default function AboutUsMobileContent() {
                 </div>
             </div>
 
-            
-
             <div className='flex flex-col items-center'>
                 <span className='font-bold text-xl'>"Walk Your Way."</span>
                 <span className='text-center px-7'>

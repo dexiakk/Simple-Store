@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import QuestionsList from '@/app/components/Admin/QuestionsList'
+import ShoesAdminPanel from '@/app/components/Admin/ShoesAdminPanel'
 
 export default function page() {
   const [user, setUser] = useState<UserProps | null>()
@@ -43,8 +44,6 @@ export default function page() {
     fetchQuestions()
   }, [])
 
-  console.log(questionsList)
-
   return (
     <div className='flex flex-col items-center'>
       <div className='w-[90%] sm:w-[70%] md:w-[60%] flex justify-between'>
@@ -74,6 +73,7 @@ export default function page() {
             <div className='pb-7 flex gap-3'>
               <TabsTrigger value="users-orders" className='text-[20px] border-2'>Users Orders</TabsTrigger>
               <TabsTrigger value="users-questions" className='text-[20px] border-2'>Users Questions</TabsTrigger>
+              <TabsTrigger value="shoes" className='text-[20px] border-2'>Shoes</TabsTrigger>
             </div>
           </TabsList>
           <TabsContent value="users-orders" className='w-full'>
@@ -87,6 +87,9 @@ export default function page() {
                 <QuestionsList questionsList={questionsList} admin={user} />
               </div>
             )}
+          </TabsContent>
+          <TabsContent value="shoes" className='w-full w-screen'>
+            <ShoesAdminPanel />
           </TabsContent>
         </Tabs>
 

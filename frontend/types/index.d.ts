@@ -59,6 +59,10 @@ type ShoeItemProps = {
     }[];
     colors: { value: string }[];
     on_sale: boolean;
+    category: any;
+    collection: any;
+    description: string;
+    shoe_sizes: [any];
 };
 
 interface ItemWindowProps {

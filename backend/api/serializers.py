@@ -78,6 +78,12 @@ class ShoeSizesSerializer(serializers.ModelSerializer):
         model = ShoeSizes
         fields = ['size']
         
+class ShoeSizesWithIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoeSizes
+        fields = ['id', 'size']   
+        
+        
 class ShoeSerializer(serializers.ModelSerializer):
     manufacturer = serializers.StringRelatedField()
     variants = ShoeVariantSerializer(many=True, read_only=True)
@@ -102,6 +108,52 @@ class ShoeSerializer(serializers.ModelSerializer):
             for variant in obj.variants.all()
         ]
         
+class ShoeCreateSerializer(serializers.ModelSerializer):
+    shoe_sizes = serializers.PrimaryKeyRelatedField(queryset=ShoeSizes.objects.all(), many=True)
+    manufacturer = serializers.PrimaryKeyRelatedField(queryset=Manufacturers.objects.all())
+    category = serializers.PrimaryKeyRelatedField(queryset=ShoeCategories.objects.all())
+    collection = serializers.PrimaryKeyRelatedField(queryset=ShoeCollections.objects.all())
+
+    class Meta:
+        model = Shoe
+        fields = '__all__'
+
+    def validate(self, data):
+        if data['sale_price'] and not data['on_sale']:
+            raise serializers.ValidationError("Sale price should only be set if 'on_sale' is True.")
+        return data
+    
+class ShoePartialUpdateSerializer(serializers.ModelSerializer):
+    manufacturer = serializers.PrimaryKeyRelatedField(queryset=Manufacturers.objects.all(), required=False)
+    shoe_sizes = serializers.PrimaryKeyRelatedField(queryset=ShoeSizes.objects.all(), many=True, required=False)
+    category = serializers.PrimaryKeyRelatedField(queryset=ShoeCategories.objects.all(), required=False)
+    collection = serializers.PrimaryKeyRelatedField(queryset=ShoeCollections.objects.all(), required=False)
+    model = serializers.CharField(max_length=50, required=False)
+    price = serializers.DecimalField(max_digits=10, decimal_places=2, required=False)
+    description = serializers.CharField(required=False)
+    bestseller = serializers.BooleanField(required=False)
+    gender = serializers.ChoiceField(choices=Shoe.GENDER_CHOICES, required=False)
+    shoe_high = serializers.ChoiceField(choices=Shoe.SHOE_HIGH_CHOICES, required=False)
+    on_sale = serializers.BooleanField(required=False)
+    sale_price = serializers.DecimalField(max_digits=10, decimal_places=2, required=False, allow_null=True)  # Allow null for sale_price
+
+    class Meta:
+        model = Shoe
+        fields = [
+            'manufacturer',
+            'shoe_sizes',
+            'category',
+            'collection',
+            'model',
+            'price',
+            'description',
+            'bestseller',
+            'gender',
+            'shoe_high',
+            'on_sale',
+            'sale_price',
+        ]
+    
 class ShoeOnSaleSerializer(serializers.ModelSerializer):
     manufacturer = serializers.StringRelatedField()
     colors = serializers.SerializerMethodField()
@@ -132,6 +184,7 @@ class ShoeFiltersSerializer(serializers.Serializer):
     collections = serializers.ListField(child=serializers.CharField())
     shoe_high = serializers.ListField(child=serializers.CharField())
     genders = serializers.ListField(child=serializers.CharField())
+    manufacturers = serializers.ListField(child=serializers.CharField())
     
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -142,6 +195,27 @@ class ShoeFiltersSerializer(serializers.Serializer):
             "collection": representation.get("collections", []),
             "shoe_high": representation.get("shoe_high", []), 
             "gender": representation.get("genders", []),
+            "manufacturer": representation.get("manufacturers", [])
+        }
+        
+class ShoeFiltersWithIDsSerializer(serializers.Serializer):
+    categories = serializers.ListField(child=serializers.CharField())
+    colors = serializers.ListField(child=serializers.CharField())
+    collections = serializers.ListField(child=serializers.CharField())
+    shoe_high = serializers.ListField(child=serializers.CharField())
+    genders = serializers.ListField(child=serializers.CharField())
+    manufacturers = serializers.ListField(child=serializers.CharField())
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        return {
+            "category": representation.get("categories", []),
+            "color": representation.get("colors", []),
+            "collection": representation.get("collections", []),
+            "shoe_high": representation.get("shoe_high", []),
+            "gender": representation.get("genders", []),
+            "manufacturer": representation.get("manufacturers", [])
         }
     
 class CartSerializer(serializers.ModelSerializer):
@@ -222,3 +296,20 @@ class UsersQuestionsSerializer(serializers.ModelSerializer):
     
     def get_admin_solved_by_username(self, obj):
         return obj.admin_solved_by.username if obj.admin_solved_by else None
+    
+class ShoeImageGallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoeImageGallery
+        fields = ['id', 'color', 'image1', 'image2', 'image3', 'image4', 'shoe']
+        
+class ShoeVariantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoeVariant
+        fields = ['id', 'shoe', 'color', 'main_image', 'images_gallery']
+        
+class ShoeToEditSerializer(serializers.ModelSerializer):
+    shoe_sizes = serializers.PrimaryKeyRelatedField(queryset=ShoeSizes.objects.all(), many=True)
+    
+    class Meta:
+        model = Shoe
+        fields = ['id', 'model', 'price', 'description', 'bestseller', 'gender', 'shoe_high', 'category', 'collection', 'manufacturer', 'on_sale', 'sale_price', 'shoe_sizes']

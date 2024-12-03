@@ -24,25 +24,25 @@ export default function Page() {
     shoe_high: [],
   });
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await getLoggedInUser();
-        setLoggedInUser(user);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const user = await getLoggedInUser();
+  //       setLoggedInUser(user);
 
-        if (user?.preferedGender) {
-          setFilters((prevFilters) => ({
-            ...prevFilters,
-            gender: [user.preferedGender],
-          }));
-        }
-      } catch (error) {
-        console.error("Error fetching logged-in user:", error);
-      }
-    };
+  //       if (user?.preferedGender) {
+  //         setFilters((prevFilters) => ({
+  //           ...prevFilters,
+  //           gender: [user.preferedGender],
+  //         }));
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching logged-in user:", error);
+  //     }
+  //   };
 
-    fetchUser();
-  }, []);
+  //   fetchUser();
+  // }, []);
 
   useEffect(() => {
     const fetchFilters = async () => {
@@ -70,6 +70,8 @@ export default function Page() {
 
     fetchShoes();
   }, [filters]);
+
+  console.log(shoeList)
 
   const handleFiltersChange = (key: keyof Filters, value: string, checked: boolean) => {
     setFilters((prevFilters) => {

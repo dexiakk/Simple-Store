@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from django.contrib.auth.models import User
 from .models import *
-from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeOnSaleSerializer, ShoeFiltersSerializer, ShoeSizesSerializer, CartSerializer, OrdersCreateSerializer, OrdersSerializer, UsersQuestionsSerializer
+from .serializers import UserSerializer, UserDetailsSerializer, AddressSerializer, ShoeSerializer, ShoeCreateSerializer, ShoeToEditSerializer, ShoePartialUpdateSerializer, ShoeOnSaleSerializer, ShoeFiltersSerializer, ShoeFiltersWithIDsSerializer, ShoeSizesSerializer, ShoeSizesWithIdSerializer, CartSerializer, OrdersCreateSerializer, OrdersSerializer, UsersQuestionsSerializer, ShoeImageGallerySerializer, ShoeVariantSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.exceptions import PermissionDenied
@@ -134,6 +134,27 @@ class ShoeList(generics.ListAPIView):
             queryset = queryset.filter(id__in=shoe_ids)
 
         return queryset.distinct()
+    
+class ShoeToEditView(generics.RetrieveAPIView):
+    serializer_class = ShoeToEditSerializer
+    permission_classes = [AllowAny]
+    authentication_classes = []
+    queryset = Shoe.objects.all()
+    lookup_field = 'id'
+
+    def get_object(self):
+        try:
+            return Shoe.objects.get(id=self.kwargs['id'])
+        except Shoe.DoesNotExist:
+            raise Http404("Shoe not found")
+
+class ShoeCreateView(generics.CreateAPIView):
+    serializer_class = ShoeCreateSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = []
+    
+    queryset = Shoe.objects.all()
+    
 
 class ShoeListOnSaleView(generics.ListAPIView):
     serializer_class = ShoeOnSaleSerializer
@@ -158,6 +179,7 @@ class ShoeFiltersView(generics.ListAPIView):
         colors = list(ShoeColors.objects.values_list('name', flat=True))
         shoe_high = [choice[0] for choice in Shoe.SHOE_HIGH_CHOICES]
         genders = [choice[0] for choice in Shoe.GENDER_CHOICES]
+        manufacturers = list(Manufacturers.objects.values_list('brand', flat=True))
 
         filters_data = {
             "categories": categories,
@@ -165,6 +187,43 @@ class ShoeFiltersView(generics.ListAPIView):
             "collections": collections,
             "shoe_high": shoe_high,
             "genders": genders,
+            "manufacturers": manufacturers,
+        }
+
+        return [filters_data]
+    
+class ShoeFiltersWithIDsView(generics.ListAPIView):
+    serializer_class = ShoeFiltersWithIDsSerializer
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def get_queryset(self):
+        categories = list(
+            ShoeCategories.objects.values('id', 'name')
+        )
+        collections = list(
+            ShoeCollections.objects.values('id', 'name')
+        )
+        colors = list(
+            ShoeColors.objects.values('id', 'name')
+        )
+        shoe_high = [
+            {"id": key, "name": value} for key, value in Shoe.SHOE_HIGH_CHOICES
+        ]
+        genders = [
+            {"id": key, "name": value} for key, value in Shoe.GENDER_CHOICES
+        ]
+        manufacturers = list(
+            Manufacturers.objects.values("id", "brand")
+        )
+
+        filters_data = {
+            "categories": categories,
+            "colors": colors,
+            "collections": collections,
+            "shoe_high": shoe_high,
+            "genders": genders,
+            "manufacturers": manufacturers,
         }
 
         return [filters_data]
@@ -179,6 +238,14 @@ class ShoeSizesList(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         return Response([size.size for size in queryset])
+    
+class ShoeSizesWithIdList(generics.ListAPIView):
+    serializer_class = ShoeSizesWithIdSerializer
+    permission_classes = []
+
+    def get_queryset(self):
+        return ShoeSizes.objects.all()
+    
 
 
 class CartList(generics.ListAPIView):
@@ -262,3 +329,107 @@ class QuestionsPartialUpdate(generics.UpdateAPIView):
             raise Http404("Question doesnt exist")
 
         return orders
+    
+class ShoeImageGalleryCreate(generics.ListCreateAPIView):
+    serializer_class = ShoeImageGallerySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return ShoeImageGallery.objects.all()
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            print(serializer.errors)
+            
+class ShoeVariantCreateView(generics.ListCreateAPIView):
+    serializer_class = ShoeVariantSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        return ShoeVariant.objects.all()
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            print(serializer.errors)
+            
+class ShoePartialUpdateView(generics.UpdateAPIView):
+    serializer_class = ShoePartialUpdateSerializer
+    permission_classes = [AllowAny]
+    authentication_classes = []
+    queryset = Shoe.objects.all()
+    lookup_field = 'id'
+
+    def get_queryset(self):
+        return super().get_queryset()
+    
+class ShoeVariantPartialUpdateView(generics.UpdateAPIView):
+    serializer_class = ShoeVariantSerializer
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def get_object(self):
+        variant_id = self.kwargs['id']
+        try:
+            return ShoeVariant.objects.get(id=variant_id)
+        except ShoeVariant.DoesNotExist:
+            raise Http404("Shoe variant not found")
+
+    def patch(self, request, *args, **kwargs):
+        shoe_variant = self.get_object()
+        serializer = self.get_serializer(shoe_variant, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ShoeImageGalleryPartialUpdateView(generics.UpdateAPIView):
+    serializer_class = ShoeImageGallerySerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        gallery_id = self.kwargs['id']
+        try:
+            return ShoeImageGallery.objects.get(id=gallery_id)
+        except ShoeImageGallery.DoesNotExist:
+            raise Http404("Shoe image gallery not found")
+
+    def patch(self, request, *args, **kwargs):
+        shoe_image_gallery = self.get_object()
+        serializer = self.get_serializer(shoe_image_gallery, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ShoeImageGalleryToEditView(generics.RetrieveAPIView):
+    serializer_class = ShoeImageGallerySerializer
+    permission_classes = [AllowAny]
+    authentication_classes = []
+    queryset = ShoeImageGallery.objects.all()
+    lookup_field = 'id'
+
+    def get_object(self):
+        try:
+            return ShoeImageGallery.objects.get(id=self.kwargs['id'])
+        except ShoeImageGallery.DoesNotExist:
+            raise Http404("Shoe not found")
+        
+class ShoeVariantToEditView(generics.RetrieveAPIView):
+    serializer_class = ShoeVariantSerializer
+    permission_classes = [AllowAny]
+    authentication_classes = []
+    queryset = ShoeVariant.objects.all()
+    lookup_field = 'id'
+
+    def get_object(self):
+        try:
+            return ShoeVariant.objects.get(id=self.kwargs['id'])
+        except ShoeVariant.DoesNotExist:
+            raise Http404("Shoe not found")

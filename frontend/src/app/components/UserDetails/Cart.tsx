@@ -131,8 +131,10 @@ export default function Cart({ color, size }: { color: String, size: number }) {
             </PopoverTrigger>
             <PopoverContent className="rounded-[12px] min-w-[350px]">
                 <div className="flex flex-col">
-                    {cartItems.map((item, index) =>
-                        item.shoe && item.variant && item.shoe.variants[parseInt(item.variant) - 1]?.main_image ? (
+                    {cartItems.map((item, index) => {
+                        const variantIndex = parseInt(item.variant!) - 1;
+                        const variantExists = Array.isArray(item.shoe?.variants) && item.shoe.variants[variantIndex];
+                        return variantExists ? (
                             <div key={index} className="flex items-center justify-between">
                                 <SignleShoeItem item={item} />
                                 <button
@@ -142,8 +144,8 @@ export default function Cart({ color, size }: { color: String, size: number }) {
                                     <Image src="/img/delete.svg" width={14} height={14} alt="delete" />
                                 </button>
                             </div>
-                        ) : null
-                    )}
+                        ) : null;
+                    })}
                     <div className="py-2 flex justify-end">
                         <span className="font-semibold">Total Price:</span>
                         <div className="ml-2 font-bold">${totalPrice.toFixed(2)}</div>

@@ -24,7 +24,6 @@ import CustomInput from "../Auth/CustomInput"
 
 export default function HelpForm() {
     const router = useRouter()
-    const [user, setUser] = useState(null)
     const [IsLoading, setIsLoading] = useState(false)
 
     const formSchema = helpFormSchema
@@ -40,10 +39,6 @@ export default function HelpForm() {
         },
     })
 
-    useEffect(() => {
-
-        user && router.push("/");
-    }, [user]);
 
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setIsLoading(true)

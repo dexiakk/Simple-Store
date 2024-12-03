@@ -4,7 +4,12 @@ import { useState, useEffect } from "react";
 
 export default function ItemWindow({ shoeList }: ItemWindowProps) {
   const [selectedImageVariants, setSelectedImageVariants] = useState<number[]>(new Array(shoeList.length).fill(0));
-  const [currentImages, setCurrentImages] = useState<string[]>(shoeList.map((shoe) => shoe.variants[0].main_image));
+  const [currentImages, setCurrentImages] = useState<string[]>(
+    shoeList.map((shoe) => {
+      const variant = Array.isArray(shoe.variants) && shoe.variants.length > 0 ? shoe.variants[0] : null;
+      return variant && variant.main_image ? variant.main_image : '/img/default-shoe-image.png';
+    })
+  );
   const [galleryVisible, setGalleryVisible] = useState<string[]>(new Array(shoeList.length).fill("hidden"));
 
   useEffect(() => {
@@ -70,7 +75,11 @@ export default function ItemWindow({ shoeList }: ItemWindowProps) {
             </div>
 
             <div className={`${galleryVisible[shoeIndex]} justify-between mt-2`}>
-              {shoe.variants[selectedImageVariants[shoeIndex]] &&
+              {shoe.variants &&
+                Array.isArray(shoe.variants) &&
+                shoe.variants.length > 0 &&
+                selectedImageVariants[shoeIndex] !== undefined &&
+                shoe.variants[selectedImageVariants[shoeIndex]] &&
                 shoe.variants[selectedImageVariants[shoeIndex]].images_gallery &&
                 shoe.variants[selectedImageVariants[shoeIndex]].images_gallery[0] &&
                 Object.keys(shoe.variants[selectedImageVariants[shoeIndex]].images_gallery[0])
@@ -103,14 +112,15 @@ export default function ItemWindow({ shoeList }: ItemWindowProps) {
             </div>
             <div className="first-letter:uppercase text-gray-600">{shoe.gender}</div>
             <div className="flex gap-1">
-              {shoe.colors.map((color, index) => (
-                <div
-                  key={index}
-                  className="w-8 h-8 rounded-full border-solid border-2"
-                  style={{ backgroundColor: color.value }}
-                  onMouseEnter={() => handleColorChange(shoeIndex, index)}
-                />
-              ))}
+              {Array.isArray(shoe.colors) &&
+                shoe.colors.map((color, index) => (
+                  <div
+                    key={index}
+                    className="w-8 h-8 rounded-full border-solid border-2"
+                    style={{ backgroundColor: color.value }}
+                    onMouseEnter={() => handleColorChange(shoeIndex, index)}
+                  />
+                ))}
             </div>
             {shoe.on_sale && (
               <span className="font-bold text-[19px] text-orange-500 mt-1">${shoe.sale_price}</span>

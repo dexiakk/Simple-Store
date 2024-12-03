@@ -239,3 +239,18 @@ html {
   background-color: #9a9a9a;
   border-radius: 4px;
 }
+
+.custom-select {
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+.custom-input {
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  padding: 0.5rem;
+  height: 2.5rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
