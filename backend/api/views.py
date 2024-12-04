@@ -151,9 +151,24 @@ class ShoeToEditView(generics.RetrieveAPIView):
 class ShoeCreateView(generics.CreateAPIView):
     serializer_class = ShoeCreateSerializer
     permission_classes = [IsAuthenticated]
-    authentication_classes = []
     
     queryset = Shoe.objects.all()
+    
+class ShoeDeleteView(generics.DestroyAPIView):
+    serializer_class = ShoeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        shoe_id = self.kwargs['id']
+        try:
+            return Shoe.objects.get(id=shoe_id)
+        except Shoe.DoesNotExist:
+            raise Http404("Shoe not found")
+
+    def delete(self, request, *args, **kwargs):
+        shoe = self.get_object()
+        shoe.delete()
+        return Response({"detail": "Shoe deleted successfully."}, status=204)
     
 
 class ShoeListOnSaleView(generics.ListAPIView):
@@ -433,3 +448,35 @@ class ShoeVariantToEditView(generics.RetrieveAPIView):
             return ShoeVariant.objects.get(id=self.kwargs['id'])
         except ShoeVariant.DoesNotExist:
             raise Http404("Shoe not found")
+        
+class ShoeVariantDeleteView(generics.DestroyAPIView):
+    serializer_class = ShoeVariantSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        variant_id = self.kwargs['id']
+        try:
+            return ShoeVariant.objects.get(id=variant_id)
+        except ShoeVariant.DoesNotExist:
+            raise Http404("Shoe variant not found")
+
+    def delete(self, request, *args, **kwargs):
+        shoe_variant = self.get_object()
+        shoe_variant.delete()
+        return Response({"detail": "Shoe variant deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+    
+class ShoeImageGalleryDeleteView(generics.DestroyAPIView):
+    serializer_class = ShoeImageGallerySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        gallery_id = self.kwargs['id']
+        try:
+            return ShoeImageGallery.objects.get(id=gallery_id)
+        except ShoeImageGallery.DoesNotExist:
+            raise Http404("Shoe image gallery not found")
+
+    def delete(self, request, *args, **kwargs):
+        shoe_image_gallery = self.get_object()
+        shoe_image_gallery.delete()
+        return Response({"detail": "Shoe image gallery deleted successfully."}, status=status.HTTP_204_NO_CONTENT)

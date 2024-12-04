@@ -5,6 +5,9 @@ import CreateShoeVariant from './CreateShoeVariant'
 import EditShoeArea from './EditShoeArea'
 import EditImageGalleryArea from './EditImageGalleryArea'
 import EditShoeVariantArea from './EditShoeVariantArea'
+import DeleteShoeArea from './DeleteShoeArea'
+import DeleteVariantArea from './DeleteVariantArea'
+import DeleteImageGalleryArea from './DeleteImageGalleryArea'
 
 export default function ShoesAdminPanel() {
   const [createVisibility, setCreateVisibility] = useState("block")
@@ -65,7 +68,7 @@ export default function ShoesAdminPanel() {
             className={`${listBorder} border-2 p-2 rounded-[8px] hover:bg-gray-300`}
             onClick={() => { handleVisibilityChange("list") }}
           >
-            Shoe List</div>
+            Delete Shoe / Shoe Variant</div>
         </div>
         <div className='w-full'>
           <div className={`${createVisibility} max-w-[1000px]`}>
@@ -109,7 +112,26 @@ export default function ShoesAdminPanel() {
             </Tabs>
           </div>
           <div className={`${listVisibility}`}>
-            dsadsadsa
+            <Tabs defaultValue="shoe" className='w-full'>
+              <TabsList className='w-full bg-white'>
+                <div className='flex gap-3'>
+                  <TabsTrigger value="shoe" className='border-2'>Delete Shoe</TabsTrigger>
+                  <TabsTrigger value="variant" className='border-2'>Delete Variant</TabsTrigger>
+                  <TabsTrigger value="gallery" className='border-2'>Delete Image Gallery</TabsTrigger>
+                </div>
+              </TabsList>
+              <TabsContent value="shoe" className='w-full'>
+                <div className='max-w-[500px]'>
+                  <DeleteShoeArea />
+                </div>
+              </TabsContent>
+              <TabsContent value="variant">
+                <DeleteVariantArea />
+              </TabsContent>
+              <TabsContent value="gallery">
+                <DeleteImageGalleryArea />
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </div>

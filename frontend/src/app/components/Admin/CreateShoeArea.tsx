@@ -12,7 +12,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { shoeFormSchema } from "@/lib/utils"
+import { ACCESS_TOKEN, shoeFormSchema } from "@/lib/utils"
 import { LucideLoader2 } from "lucide-react"
 import api from "@/lib/api"
 import { Input } from '@/components/ui/input'
@@ -96,7 +96,16 @@ export default function CreateShoeArea() {
                 shoe_sizes: data.shoe_sizes,
             };
 
-            const response = await api.post("/api/shoes/create/", requestData);
+            const response = await api.post(
+                "/api/shoes/create/",
+                requestData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${ACCESS_TOKEN}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
 
 
             alert("Shoe created successfully!");

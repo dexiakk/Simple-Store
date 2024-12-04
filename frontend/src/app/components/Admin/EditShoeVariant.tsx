@@ -81,32 +81,38 @@ export default function EditShoeVariant({ variantId }: { variantId: any }) {
 
     const updateFields = async () => {
         const formData = new FormData();
-    
+
         if (newColor) {
-          formData.append('color', newColor);
+            formData.append('color', newColor);
         }
-    
-        if (newFile) formData.append('main_image', newFile);
-    
+
+        if (newFile) {
+            formData.append('main_image', newFile);
+        }
+
+        if (selectedImageGalleryId) {
+            formData.append('images_gallery', selectedImageGalleryId.toString());
+        }
+
         try {
             console.log(formData)
-          const response = await api.patch(`/api/shoe-variant/update/${variantId}/`, formData, {
-            headers: {
-              Authorization: `Bearer ${ACCESS_TOKEN}`,
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-    
-          if (response.status === 200) {
-            alert('Variant updated successfully');
-          } else {
-            alert('Failed to update variant');
-          }
+            const response = await api.patch(`/api/shoe-variant/update/${variantId}/`, formData, {
+                headers: {
+                    Authorization: `Bearer ${ACCESS_TOKEN}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            if (response.status === 200) {
+                alert('Variant updated successfully');
+            } else {
+                alert('Failed to update variant');
+            }
         } catch (error) {
-          console.error('Error updating variant:', error);
-          alert('An error occurred while updating the gallery');
+            console.error('Error updating variant:', error);
+            alert('An error occurred while updating the gallery');
         }
-      };
+    };
 
     return (
         <Sheet key="bottom">

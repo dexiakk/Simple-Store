@@ -10,6 +10,7 @@ urlpatterns = [
     path("shoelist/", views.ShoeList.as_view(), name="shoes-list"),
     path("shoe-to-edit/<int:id>/", views.ShoeToEditView.as_view(), name="shoe-to-edit"),
     path('shoes/create/', views.ShoeCreateView.as_view(), name='shoe-create'),
+    path('shoes/delete/<int:id>/', views.ShoeDeleteView.as_view(), name='shoe-delete'),
     path('shoes/update/<int:id>/', views.ShoePartialUpdateView.as_view(), name='shoe-update'),
     path("shoe-on-sale-list/", views.ShoeListOnSaleView.as_view(), name="shoe-on-sale-list"),
     path('shoe-filters/', views.ShoeFiltersView.as_view(), name='shoe-filters'),
@@ -26,9 +27,11 @@ urlpatterns = [
     path('questions-update/<int:id>/', views.QuestionsPartialUpdate.as_view(), name="questions-update"),
     path('image-galleries/', views.ShoeImageGalleryCreate.as_view(), name="image-galleries"),
     path('shoe-variants/', views.ShoeVariantCreateView.as_view(), name="shoe-variants"),
+    path('shoe-variant/delete/<int:id>/', views.ShoeVariantDeleteView.as_view(), name='shoe-variant-delete'),
     path('shoe-variant-to-edit/<int:id>/', views.ShoeVariantToEditView.as_view(), name="shoe-variant-to-edit"),
     path('shoe-variant/update/<int:id>/', views.ShoeVariantPartialUpdateView.as_view(), name='shoe-variant-update'),
     path("image-gallery-to-edit/<int:id>/", views.ShoeImageGalleryToEditView.as_view(), name="image-gallery-to-edit"),
+    path('image-gallery/delete/<int:id>/', views.ShoeImageGalleryDeleteView.as_view(), name='image-gallery-delete'),
     path('image-gallery/update/<int:id>/', views.ShoeImageGalleryPartialUpdateView.as_view(), name='image-gallery-update'),
 ]
 
